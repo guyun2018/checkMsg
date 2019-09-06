@@ -12,7 +12,8 @@
 </head>
 
 <body>
-<p th:text="${accessNo}" id="data" style="display: none"></p>
+<p th:text="${accessNo}" id="accessNo" style="display: none"></p>
+<p th:text="${hospitalCode}" id="hospitalCode" style="display: none"></p>
 <div class="swiper-container swiper-container-horizontal">
     <div class="swiper-wrapper">
         <div class="swiper-slide swiper-slide-active">
@@ -63,13 +64,13 @@
 <script th:src="@{/static/jquery/jquery-3.2.1.min.js}" charset="utf-8"></script>
 <script th:src="@{/static/layer/layer.js}" charset="utf-8"></script>
 <script>
-
-    var access = $("#data").text();
+    var access = $("#accessNo").text();
+    var hospitalCode = $("#hospitalCode").text();
     $(document).ready(function () {
         document.getElementById("qrImg").style.display = 'none';
         document.getElementById('loadQR').addEventListener("click", () => {
             // document.getElementById('loadQR').style.opacity = '0';
-            gz().then(e=>{
+            gz().then(e => {
                 if (e.success) {
                     if (e.obj) {
                         window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU5MzY2NTIxMQ==#wechat_redirect"
@@ -79,7 +80,7 @@
                 } else {
                     alert("出故障啦！")
                 }
-            }).then(res=>{
+            }).then(res => {
                 let qrPath = res;
                 document.getElementById("loadQR").style.display = 'none';
                 document.getElementById("qrImg").src = qrPath;
@@ -89,11 +90,13 @@
         });
         // var path ='${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}';
         $.post('/getQueueInfo', {accessNo: access}, function (e) {
-            if(e.success){
-
+            if (e.success) {
             }
         })
+    }).catch(reject => {
+        layer.alert(reject)
     })
+
 
     function gz() {
         return new Promise((resolve, reject) => {
@@ -102,8 +105,9 @@
             })
         })
     }
+
     function createQrCode() {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             layer.load(1);
             //生成二维码
             $.post('/createCode', {accessNo: access}, function (res) {
@@ -112,6 +116,7 @@
             })
         })
     }
+
     // function gz() {
     //     $.post('/getOpenId', {accessNo: access}, function (e) {
     //         //关注过公众号则直接跳转

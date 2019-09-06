@@ -1,9 +1,11 @@
 package com.kayisoft.controller;
 
+import com.kayisoft.service.QueueService;
 import com.kayisoft.util.CheckoutUtil;
 import com.kayisoft.util.MessageUtil;
 import com.kayisoft.util.WXPayUtils;
 import com.kayisoft.util.XMLUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,10 @@ import java.util.Map;
  * @Date 2019/9/2
  */
 @Controller
-public class tokenController {
+public class GzController {
+
+    @Autowired
+    QueueService queueService;
     /**
      * 公众号token认证url
      */
@@ -70,6 +75,7 @@ public class tokenController {
         //所以我们既然要回复过去，就要颠倒过来
         String fromUser = map.get("ToUserName");
         String toUser = map.get("FromUserName");
+        String accessNo = map.get("EventKey");
         System.out.println("用户的openid："+toUser);
         String content = "";
 
@@ -93,8 +99,9 @@ public class tokenController {
                 returnMap.put("CreateTime", System.currentTimeMillis()+"");
                 returnMap.put("MsgType", "text");
                 returnMap.put("Content", "https://www.baidu.com");
-                String accessNo = map.get("EventKey");
-                content = "扫码成功:"+accessNo;
+
+                 content = "查询排队情况请回复【1】";
+
 //                String encryptMsg = WXPublicUtils.encryptMsg(WXPayUtils.mapToXml(returnMap), new Date().getTime()+"", WXPublicUtils.getRandomStr());
 //                return encryptMsg;
                 writer.print(MessageUtil.setMessage(fromUser,toUser,content));
@@ -106,7 +113,7 @@ public class tokenController {
             String text = map.get("Content");
 
             if (text.equals("1")){
-                content = "您可以在“我的账户——服务——退款”中查看您的退款明细";
+                queueService.sendMsg(toUser);
             }else if (text.equals("2")){
                 content = "如果您购买了本店的产品，订单页面会展示在您的主菜单中";
             }else if (text.equals("3")){

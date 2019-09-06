@@ -20,20 +20,26 @@ public class QueueBean {
 
     private String queueNo;
 
-    private Integer peopleNo;
+    private String peopleNo;
+
+    private Integer number;
 
     private String modality;
+
+    private Integer time;
 
     public QueueBean() {
     }
 
-    public QueueBean(String accessNo, String hospitalCode, String hospitalName, String name, String queueNo, Integer peopleNo,String modality) {
+    public QueueBean(String accessNo, String hospitalCode, String hospitalName, String name, String queueNo, String peopleNo,Integer number,String modality,Integer time) {
         this.accessNo = accessNo;
         this.hospitalCode= hospitalCode;
         this.hospitalName = hospitalName;
         this.name = name;
         this.queueNo = queueNo;
         this.peopleNo = peopleNo;
+        this.number = number;
         this.modality = modality;
+        this.time = time;
     }
 }

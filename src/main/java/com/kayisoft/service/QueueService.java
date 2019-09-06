@@ -1,6 +1,9 @@
 package com.kayisoft.service;
 
+import com.kayisoft.model.QueueBean;
 import com.kayisoft.vo.Result;
+
+import java.util.List;
 
 /**
  * @Author tianqiu.lan
@@ -12,7 +15,7 @@ public interface QueueService {
      * @param accessNo 检查号
      * @return result
      */
-    Result getQueueInfo(String accessNo);
+    List<QueueBean> getQueueInfo(String accessNo,String hospitalCode);
 
     /**
      * 去关注
@@ -27,4 +30,6 @@ public interface QueueService {
      * @return
      */
     Result getOpenId(String accessNo);
+
+    Result sendMsg(String openId);
 }

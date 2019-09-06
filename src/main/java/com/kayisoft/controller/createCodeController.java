@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Controller
 @PropertySource(value = {"classpath:systemConfig.properties"})
-public class createCodeController {
+public class CreateCodeController {
 
     @Autowired
     AccessTokenService accessTokenService;
