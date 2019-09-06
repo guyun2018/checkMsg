@@ -1,0 +1,69 @@
+server:
+  port: 10008
+spring:
+  devtools:
+      restart:
+        enabled: true
+  datasource:
+    url: jdbc:oracle:thin:@192.168.0.5:1521:orcl
+    username: riswebdb
+    password: xingyuan
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 8
+      min-idle: 1
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runsMillis: 60000
+      min-evictable-idle-timeMillis: 300000
+      validation-query: select 1 from dual
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      use-global-data-source-stat: true
+  thymeleaf:
+    mode: html
+    encoding: UTF-8
+    type: text/html
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${web.img-path}
+web:
+  img-path: D:/static/mdtImage
+
+
+#pagehelper测试乱码
+pagehelper:
+    helperDialect: oracle
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+mybatis:
+    type-aliases-package: com.kayisoft.model
+    mapper-locations: classpath*:mapper/*.xml,classpath*:mapper/*/*.xml
+    check-config-location: true
+#  微信小程序配置 appid /appsecret
+wx:
+  applet:
+    appid: wxa3fe1d4208cda38a
+    secret: c359d1b7c331e3a20b99945ebcb6bce2
+    wxLoginUrl: https://api.weixin.qq.com/sns/jscode2session?
+logging:
+  level:
+   com:
+    kayisoft:
+     mapper: DEBUG
+image:
+  path: D:/static/mdtImage
+
+
+

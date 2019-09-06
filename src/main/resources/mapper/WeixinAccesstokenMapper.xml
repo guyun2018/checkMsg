@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kayisoft.mapper.WeixinAccesstokenMapper">
+
+  <resultMap id="BaseResultMap" type="com.kayisoft.model.WeixinAccesstoken">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="ACCESS_TOKEN" jdbcType="VARCHAR" property="accessToken" />
+    <result column="EFFECTIVE_TIME" jdbcType="DATE" property="effectiveTime" />
+    <result column="UPDATE_TIME" jdbcType="DATE" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ACCESS_TOKEN, EFFECTIVE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WEIXIN_ACCESSTOKEN
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from WEIXIN_ACCESSTOKEN
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.kayisoft.model.WeixinAccesstoken">
+    insert into WEIXIN_ACCESSTOKEN (ID, ACCESS_TOKEN, EFFECTIVE_TIME, 
+      UPDATE_TIME)
+    values (#{id,jdbcType=DECIMAL}, #{accessToken,jdbcType=VARCHAR}, #{effectiveTime,jdbcType=DATE}, 
+      #{updateTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kayisoft.model.WeixinAccesstoken">
+    insert into WEIXIN_ACCESSTOKEN
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="accessToken != null">
+        ACCESS_TOKEN,
+      </if>
+      <if test="effectiveTime != null">
+        EFFECTIVE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="accessToken != null">
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTime != null">
+        #{effectiveTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kayisoft.model.WeixinAccesstoken">
+    update WEIXIN_ACCESSTOKEN
+    <set>
+      <if test="accessToken != null">
+        ACCESS_TOKEN = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveTime != null">
+        EFFECTIVE_TIME = #{effectiveTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=DATE},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kayisoft.model.WeixinAccesstoken">
+    update WEIXIN_ACCESSTOKEN
+    set ACCESS_TOKEN = #{accessToken,jdbcType=VARCHAR},
+      EFFECTIVE_TIME = #{effectiveTime,jdbcType=DATE},
+      UPDATE_TIME = #{updateTime,jdbcType=DATE}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <update id="updateAccessToken" parameterType="com.kayisoft.model.WeixinAccesstoken">
+    update WEIXIN_ACCESSTOKEN
+    set ACCESS_TOKEN = #{accessToken,jdbcType=VARCHAR},
+    EFFECTIVE_TIME = sysdate+2/24,
+    UPDATE_TIME = sysdate
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

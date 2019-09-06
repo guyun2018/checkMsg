@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" >
+    <diskStore path="java.io.tmpdir"/>
+    <!-- 默认缓存 -->
+    <defaultCache
+            maxEntriesLocalHeap="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            maxEntriesLocalDisk="10000000"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+        <persistence strategy="localTempSwap"/>
+    </defaultCache>
+
+    <cache name="AccessTokenCache"
+           maxElementsInMemory="30000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="7200"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU"/>
+
+    <!-- 登录记录缓存 锁定10分钟 -->
+    <cache name="loginRetryCache"
+           eternal="false"
+           timeToIdleSeconds="600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true"
+           maxEntriesLocalHeap="0">
+    </cache>
+
