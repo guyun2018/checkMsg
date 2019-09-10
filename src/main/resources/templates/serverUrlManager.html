@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/static/kendoui/styles/kendo.common.min.css}" rel="stylesheet">
+    <link th:href="@{/static/kendoui/styles/kendo.silver.min.css}" rel="stylesheet">
+    <link th:href="@{/static/hplus/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/static/hplus/css/font-awesome.css}" rel="stylesheet">
+    <link th:href="@{/static/hplus/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/static/css/base.css}" rel="stylesheet">
+    <title>医院服务路径管理</title>
+</head>
+<body class="gray-bg" style="height:calc(100% - 10px);">
+<div id="OA-box" style="height:100%">
+    <div class="wrapper wrapper-content" style="margin-top:10px; height: 100%;">
+        <div class="ibox float-e-margins">
+            <div class="ibox-header">
+                <form class="form-inline" id="searchForm">
+
+                </form>
+                <button type="button" class="btn btn-primary" onclick="openQuartzEdit('')">
+                    <span class="glyphicon glyphicon-plus"></span> 新增
+                </button>
+            </div>
+        </div>
+        <div class="ibox-content" style="height:calc(100% - 50px);">
+            <div id="quartzGrid" style="height:100%; overflow: hidden;"></div>
+        </div>
+    </div>
+</div>
+</body>
+<!--<script th:replace="/common/template::script"></script>-->
+<script th:src="@{/static/jquery/jquery-3.2.1.min.js}" charset="utf-8"></script>
+<script type="text/javascript" th:src="@{/static/kendoui/js/kendo.all.min.js}"></script>
+<script type="text/javascript">
+    var dataSource;
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: '/manager/getPropertiesInfo',
+                    type: "post",
+                    dataType: "json"
+                }
+            },
+            schema: {
+                data: function (response) {
+                    return response.results;
+                },
+                total: function (response) {
+                    return response.count;
+                },
+                model: {
+                    id: "hospitalCode",
+                    fields: {
+                        // jobName: {type: "string"},
+                        // cron: {type: "string"},
+                        // jobStatus: {type: "number"},
+                        // classPath: {type: "string"},
+                        // jobDesc: {type: "string"}
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            serverPaging: true
+        });
+        $("#quartzGrid").kendoGrid({
+            columns: [
+                {field: "hospitalCode", title: "医院代码", width: '140px'},
+                {field: "hospitalName", title: "医院名称", width: '150px'},
+                {field: "url", title: "服务地址", width: '150px'},
+                {
+                    title: "操作", width: '240px',
+                    template: kendo.template($("#opt").html())
+                }],
+            dataSource: dataSource,
+            noRecords: {
+                template: "<h3>无数据显示</h3>"
+            },
+            //height:'500px',
+            width: '95%',
+            filterable: false,
+            sortable: false,
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            }
+        });
+    })
+
+    //编辑
+    function openQuartzEdit(id) {
+        var title = "编辑";
+        id = id ? id : "0";
+        var content = "/manager/serverUrlManagerEdit/" + id;
+        // parent.$.InnerAddTab(content, title);
+        window.location.href=content
+    }
+
+    function deleteById(id) {
+        var allData = {
+            id: id
+        };
+        console.log(id);
+        layer.confirm("您确定要删除吗？", {
+            btn: ["确认", "取消"]
+        }, function () {
+            $.ajax({
+                url: "/quartz/deleteById",
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(allData),
+                beforeSend: function () {
+                    layer.msg('正在处理，请稍等..', {
+                        icon: 16
+                    });
+                },
+                success: function (result) {
+                    console.log(result);
+                    console.log(result.success);
+                    if (result.success) {
+                        layer.alert('删除成功', {
+                            icon: 6
+                        });
+                        dataSource.read();
+                    } else {
+                        layer.alert(result.msg, {icon: 5});
+                    }
+
+                }
+            })
+        });
+    }
+
+    function startById(id) {
+        var allData = {
+            id: id
+        };
+        console.log(id);
+        layer.confirm("您确定要启动吗？", {
+            btn: ["确认", "取消"]
+        }, function () {
+            $.ajax({
+                url: "/quartz/startJob",
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(allData),
+                beforeSend: function () {
+                    layer.msg('正在处理，请稍等..', {
+                        icon: 16
+                    });
+                },
+                success: function (result) {
+                    console.log(result);
+                    console.log(result.success);
+                    if (result.success) {
+                        layer.alert(result.msg, {
+                            icon: 6
+                        });
+                        dataSource.read();
+                    } else {
+                        layer.alert(result.msg, {icon: 5});
+                    }
+
+                }
+            })
+        });
+    }
+
+    function stopById(id) {
+        var allData = {
+            id: id
+        };
+        console.log(id);
+        layer.confirm("您确定要停止吗？", {
+            btn: ["确认", "取消"]
+        }, function () {
+            $.ajax({
+                url: "/quartz/stopJob",
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(allData),
+                beforeSend: function () {
+                    layer.msg('正在处理，请稍等..', {
+                        icon: 16
+                    });
+                },
+                success: function (result) {
+                    console.log(result);
+                    console.log(result.success);
+                    if (result.success) {
+                        layer.alert(result.msg, {
+                            icon: 6
+                        });
+                        dataSource.read();
+                    } else {
+                        layer.alert(result.msg, {icon: 5});
+                    }
+
+                }
+            })
+        });
+    }
+</script>
+
+<script id="opt" type="text/x-kendo-template">
+    <button type="button" class="btn btn-editor btn-sm"
+            onclick=openQuartzEdit("#:id#")>修改
+    </button>
+</script>
+
+</html>

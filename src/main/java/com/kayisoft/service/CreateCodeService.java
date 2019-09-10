@@ -1,5 +1,6 @@
 package com.kayisoft.service;
 
+import com.kayisoft.model.QueueUserInfo;
 import com.kayisoft.vo.Result;
 
 /**
@@ -9,10 +10,10 @@ import com.kayisoft.vo.Result;
 public interface CreateCodeService {
     /**
      * 生成二维码
-     * @param accessNo 检查号
+     * @param queueUserInfo bean
      * @return result
      */
-    String createCode(String accessNo);
+    String createCode(QueueUserInfo queueUserInfo);
 
     /**
      * 获取二维码过期时间设置

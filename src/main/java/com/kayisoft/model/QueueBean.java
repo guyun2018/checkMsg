@@ -28,10 +28,37 @@ public class QueueBean {
 
     private Integer time;
 
+    private Integer isStart;
+
+    private String checkDate;
+
+    private String today;
+
     public QueueBean() {
     }
 
-    public QueueBean(String accessNo, String hospitalCode, String hospitalName, String name, String queueNo, String peopleNo,Integer number,String modality,Integer time) {
+    public QueueBean( String checkDate, String today) {
+        this.checkDate = checkDate;
+        this.today = today;
+    }
+
+    public QueueBean(String accessNo, String hospitalCode, String hospitalName, String name, String queueNo,
+                     String peopleNo, Integer number, String modality, Integer time, Integer isStart, String checkDate, String today) {
+        this.accessNo = accessNo;
+        this.hospitalCode = hospitalCode;
+        this.hospitalName = hospitalName;
+        this.name = name;
+        this.queueNo = queueNo;
+        this.peopleNo = peopleNo;
+        this.number = number;
+        this.modality = modality;
+        this.time = time;
+        this.isStart = isStart;
+        this.checkDate = checkDate;
+        this.today = today;
+    }
+
+    public QueueBean(String accessNo, String hospitalCode, String hospitalName, String name, String queueNo, String peopleNo, Integer number, String modality, Integer time, Integer isStart) {
         this.accessNo = accessNo;
         this.hospitalCode= hospitalCode;
         this.hospitalName = hospitalName;
@@ -41,5 +68,8 @@ public class QueueBean {
         this.number = number;
         this.modality = modality;
         this.time = time;
+
+
+        this.isStart = isStart;
     }
 }

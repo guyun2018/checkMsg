@@ -1,6 +1,7 @@
 package com.kayisoft.service;
 
 import com.kayisoft.model.QueueBean;
+import com.kayisoft.model.QueueUserInfo;
 import com.kayisoft.vo.Result;
 
 import java.util.List;
@@ -12,24 +13,24 @@ import java.util.List;
 public interface QueueService {
     /**
      * 获取检查相关信息
-     * @param accessNo 检查号
+     * @param queueBean bean
      * @return result
      */
-    List<QueueBean> getQueueInfo(String accessNo,String hospitalCode);
+    List<QueueBean> getQueueInfo(QueueBean queueBean);
+
+
 
     /**
-     * 去关注
-     * @param accessNo acc
+     *生成二维码
+     * @param queueUserInfo queueUserInfo
      * @return result
      */
-    Result toFollow(String accessNo);
-
-    /**
-     *
-     * @param accessNo
-     * @return
-     */
-    Result getOpenId(String accessNo);
+    Result getOpenId(QueueUserInfo queueUserInfo);
 
     Result sendMsg(String openId);
+
+
+    void addOpenId(String uuid,String openId);
+
+    void deleteOpenId(String openId);
 }

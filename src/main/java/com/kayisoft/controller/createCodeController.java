@@ -2,6 +2,7 @@ package com.kayisoft.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.kayisoft.model.QueueUserInfo;
 import com.kayisoft.service.AccessTokenService;
 import com.kayisoft.service.CreateCodeService;
 import com.kayisoft.util.HttpUtils;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
@@ -33,14 +35,14 @@ public class CreateCodeController {
     CreateCodeService createCodeService;
 
     /**
-     *
-     * @param accessNo 检查号
-     * @return str
+     * 生成官方二维码
+     * @param queueUserInfo queueUserInfo
+     * @return 二维码地址
      */
     @RequestMapping(value = "/createCode")
     @ResponseBody
-    public String getWXPublicQRCode(String accessNo) {
-        String code = createCodeService.createCode(accessNo);
+    public String getWXPublicQRCode(@RequestBody QueueUserInfo queueUserInfo) {
+        String code = createCodeService.createCode(queueUserInfo);
         return code;
     }
 

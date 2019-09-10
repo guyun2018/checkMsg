@@ -5,7 +5,7 @@
     pagination: ".swiper-pagination",
     paginationClickable: !0,
     paginationBulletRender: function (a, b) {
-        return '<span class="' + b + '"><i>' + a + "</i></span>"
+        return '<span class="' + b + '"><i>' + parseInt(a+1) + "</i></span>"
     },
     onProgress: function (a) {
         var b, c, d;

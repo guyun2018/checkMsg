@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kayisoft.mapper.QueueUserInfoMapper">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.kayisoft.model.QueueUserInfo">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="access_no" property="accessNo" jdbcType="VARCHAR"/>
+        <result column="hospital_code" property="hospitalCode" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        access_no,
+        hospital_code,
+        create_date,
+        update_date,
+        open_id
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="queueUserInfo.id">
+        INSERT INTO queue_user_info (
+            id,
+            access_no,
+            hospital_code,
+            create_date,
+            update_date,
+            open_id
+        ) VALUES (
+            #{queueUserInfo.id,jdbcType=VARCHAR},
+            #{queueUserInfo.accessNo,jdbcType=VARCHAR},
+            #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},
+            #{queueUserInfo.createDate,jdbcType=TIMESTAMP},
+            #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},
+            #{queueUserInfo.openId,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective">
+        INSERT INTO queue_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="queueUserInfo.id!=null"> id,</if>
+            <if test="queueUserInfo.accessNo!=null"> access_no,</if>
+            <if test="queueUserInfo.hospitalCode!=null"> hospital_code,</if>
+            <if test="queueUserInfo.createDate!=null"> sysdate,</if>
+            <if test="queueUserInfo.updateDate!=null"> update_date,</if>
+            <if test="queueUserInfo.openId!=null"> open_id,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="queueUserInfo.id!=null">#{queueUserInfo.id,jdbcType=VARCHAR},
+            </if>
+            <if test="queueUserInfo.accessNo!=null">#{queueUserInfo.accessNo,jdbcType=VARCHAR},
+            </if>
+            <if test="queueUserInfo.hospitalCode!=null">#{queueUserInfo.hospitalCode,jdbcType=VARCHAR},
+            </if>
+            <if test="queueUserInfo.createDate!=null">#{queueUserInfo.createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="queueUserInfo.updateDate!=null">#{queueUserInfo.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="queueUserInfo.openId!=null">#{queueUserInfo.openId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO queue_user_info (
+            id,
+            access_no,
+            hospital_code,
+            create_date,
+            update_date,
+            open_id
+        )VALUES
+        <foreach collection="queueUserInfos" item="queueUserInfo" index="index" separator=",">
+            (
+            #{queueUserInfo.id,jdbcType=VARCHAR},
+            #{queueUserInfo.accessNo,jdbcType=VARCHAR},
+            #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},
+            #{queueUserInfo.createDate,jdbcType=TIMESTAMP},
+            #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},
+            #{queueUserInfo.openId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="updateByPrimaryKeySelective">
+        UPDATE queue_user_info
+        <set>
+            <if test="queueUserInfo.accessNo != null"> access_no= #{queueUserInfo.accessNo,jdbcType=VARCHAR},</if>
+            <if test="queueUserInfo.hospitalCode != null"> hospital_code= #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},</if>
+            <if test="queueUserInfo.createDate != null"> create_date= #{queueUserInfo.createDate,jdbcType=TIMESTAMP},</if>
+            <if test="queueUserInfo.updateDate != null"> update_date= #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},</if>
+            <if test="queueUserInfo.openId != null"> open_id= #{queueUserInfo.openId,jdbcType=VARCHAR}</if>
+        </set>
+        WHERE id = #{queueUserInfo.id,jdbcType=VARCHAR}
+    </update>
+    <select id="selectOpenId" resultMap="BaseResultMap">
+      SELECT OPEN_ID
+      FROM QUEUE_USER_INFO
+      WHERE  ACCESS_NO = #{accessNo,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
+    </select>
+    <select id="selectHospitalCode" resultMap="BaseResultMap">
+      SELECT HOSPITAL_CODE
+      FROM QUEUE_USER_INFO
+      WHERE  ACCESS_NO = #{accessNo,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByOpenId">
+      DELETE FROM QUEUE_USER_INFO WHERE OPEN_ID = #{openId,jdbcType=VARCHAR}
+    </delete>
+</mapper>
+

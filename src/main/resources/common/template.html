@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title, link, style)">
+    <th:block th:if="${title == null}">
+        <title>TIMO后台</title>
+    </th:block>
+    <th:block th:if="${title != null}">
+        <title th:replace="${title}">title</title>
+    </th:block>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layer/skin/layer.css}"  media="all">
+    <!-- kendoUI kendo.default.min.css-->
+    <link th:href="@{/static/kendoui/styles/kendo.common.min.css}" rel="stylesheet">
+    <link th:href="@{/static/kendoui/styles/kendo.silver.min.css}" rel="stylesheet">
+    <link th:href="@{/static/hplus/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/static/hplus/css/font-awesome.css}" rel="stylesheet">
+    <link th:href="@{/static/hplus/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/static/css/base.css}" rel="stylesheet">
+    <th:block th:if="${link != null}">
+        <th:block th:replace="${link}"></th:block>
+    </th:block>
+
+    <th:block th:if="${style != null}">
+        <th:block th:replace="${style}"></th:block>
+    </th:block>
+
+</head>
+<body>
+    <th:block th:fragment="script">
+        <script th:src="@{/static/jquery/jquery-3.2.1.min.js}" charset="utf-8"></script>
+        <script th:src="@{/static/layer/layer.js}" charset="utf-8"></script>
+        <script type="text/javascript" th:src="@{/static/kendoui/js/kendo.all.min.js}"></script>
+        <script th:src="@{/static/kendoui/js/messages/kendo.messages.zh-CN.min.js}"></script>
+        <script th:src="@{/static/kendoui/js/cultures/kendo.culture.zh-CHS.min.js}"></script>
+        <script type="text/javascript" th:src="@{/static/kendoui/js/jszip.min.js}"></script>
+        <script type="text/javascript" th:src="@{/static/js/kyUtilJS.js}"></script>
+        <script type="text/javascript" th:src="@{/static/js/paramFilter.js}"></script>
+    </th:block>
+
+</body>
+</html>

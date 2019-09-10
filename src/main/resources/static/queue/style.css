@@ -1,5 +1,12 @@
 ﻿@charset "utf-8";
 
+:root {
+	--textSize     : 16px;
+	--titleSize    : 24px;
+	--emphasizeSize: 22px;
+	--bottomSize   : 20px;
+}
+
 * {
 	margin : 0;
 	padding: 0
@@ -11,19 +18,19 @@ html {
 
 body {
 	word-wrap: break-word;
-	font     : 16px/1.5 Helvetica, Arial;
+	font     : var(--textSize)/1.5 Helvetica, Arial;
 	/* 这里是设置字体，Helvetica字体在移动端各系统都支持（都不支持微软雅黑） */
 	color                   : #333;
 	-webkit-text-size-adjust: none;
 	/* 设置文本不会放大，普通网页在移动端打开文本是会跟随网页结构缩放的 */
-	background-color: #77af9c;
-	flex-direction  : column;
-	display         : flex;
-	align-items     : center;
-	justify-content : flex-start;
-	box-sizing      : border-box;
-	min-height      : 100vh;
-	max-height      : 100vh;
+	background-color   : #77af9c;
+	flex-direction     : column;
+	display            : flex;
+	align-items        : center;
+	justify-content    : flex-start;
+	box-sizing         : border-box;
+	/* min-height      : 100vh;
+	max-height         : 100vh; */
 }
 
 body * {
@@ -73,11 +80,11 @@ body * {
 	align-items    : center;
 	justify-content: center;
 	color          : #285943;
-	font-size      : 24px;
+	font-size      : var(--titleSize);
 }
 
 .emphasize {
-	font-size: 22px;
+	font-size: var(--emphasizeSize);
 	color    : #4fa880;
 	margin   : 0 3px;
 }
@@ -117,17 +124,7 @@ body * {
 	color            : #815d4b
 }
 
-@media screen and (min-height:481px) {
-	.swiper-wrapper {
-		margin-top: 20px
-	}
-}
 
-@media screen and (min-height:569px) {
-	.swiper-wrapper {
-		margin-top: 40px
-	}
-}
 
 
 .queueInfo {
@@ -153,7 +150,7 @@ body * {
 	color        : #285943;
 	line-height  : 40px;
 	border-radius: 10px;
-	font-size    : 20px;
+	font-size    : var(--bottomSize);
 }
 
 .qrText,
@@ -189,7 +186,7 @@ body * {
 	border-radius: 10px;
 	margin-bottom: 10px;
 	margin-top   : 10px;
-	font-size    : 20px;
+	font-size    : var(--bottomSize);
 }
 
 .scheIcon {
@@ -211,4 +208,65 @@ button {
 	outline         : none;
 	border          : 0;
 	background-color: transparent;
+}
+
+.swiper-wrapper {
+	margin-top: 40px
+}
+
+@media screen and (max-width:320px) {
+	:root {
+		--textSize     : 12px;
+		--titleSize    : 20px;
+		--emphasizeSize: 18px;
+		--bottomSize   : 16px;
+	}
+
+	.swiper-wrapper {
+		margin-top: 10px
+	}
+}
+
+@media screen and (min-width:321px) and (max-width:375px) {
+	:root {
+		--textSize     : 12px;
+		--titleSize    : 20px;
+		--emphasizeSize: 18px;
+		--bottomSize   : 16px;
+	}
+
+	.swiper-wrapper {
+		margin-top: 10px
+	}
+}
+
+@media screen and (min-width:376px) and (max-width:414px) {
+	:root {
+		--textSize     : 13px;
+		--titleSize    : 21px;
+		--emphasizeSize: 19px;
+		--bottomSize   : 17px;
+	}
+
+	.swiper-wrapper {
+		margin-top: 10px
+	}
+}
+
+@media screen and (min-width:415px) and (max-width:639px) {
+	:root {
+		--textSize     : 14px;
+		--titleSize    : 22px;
+		--emphasizeSize: 20px;
+		--bottomSize   : 18px;
+	}
+}
+
+@media screen and (min-width:640px) and (max-width:719px) {
+	:root {
+		--textSize     : 15px;
+		--titleSize    : 23px;
+		--emphasizeSize: 21px;
+		--bottomSize   : 19px;
+	}
 }

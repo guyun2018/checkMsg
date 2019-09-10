@@ -2,7 +2,9 @@ package com.kayisoft.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.kayisoft.mapper.QueueUserInfoMapper;
 import com.kayisoft.model.QueueBean;
+import com.kayisoft.model.QueueUserInfo;
 import com.kayisoft.util.CommonUtil;
 import com.kayisoft.util.DateUtil;
 import com.kayisoft.util.HttpUtils;
@@ -39,6 +41,9 @@ public class CreateCodeServiceImpl implements CreateCodeService {
     @Value("${secret}")
     private String secret;
 
+    @Autowired
+    QueueUserInfoMapper queueUserInfoMapper;
+
     /**
      * 二维码类型 "1": 临时二维码  "2": 永久二维码
      */
@@ -57,17 +62,28 @@ public class CreateCodeServiceImpl implements CreateCodeService {
     /**
      * 生成二维码
      *
-     * @param accessNo 检查号
+     * @param queueUserInfo bean
      * @return result
      */
     @Override
-    public String createCode(String accessNo) {
+    public String createCode(QueueUserInfo queueUserInfo) {
         //获取accessoken
         String wxAccessToken = accessTokenService.getAccToken("AccessTokenCache");
-        System.out.println("获取二维码的token:"+ wxAccessToken);
+        System.out.println("获取二维码的token:" + wxAccessToken);
         Map<String, Object> map = new HashMap<>();
         String str1 = "1";
         String str2 = "2";
+        QueueUserInfo info = queueUserInfoMapper.selectHospitalCode(queueUserInfo);
+        String scene = "";
+        if (info == null) {
+            //将accessNo和hospitalCode存入表
+            QueueUserInfo queueUserInfo1 = new QueueUserInfo();
+            queueUserInfo1.setId(CommonUtil.getGUID());
+            queueUserInfo1.setHospitalCode(queueUserInfo.getHospitalCode());
+            queueUserInfo1.setAccessNo(queueUserInfo.getAccessNo());
+            queueUserInfoMapper.insertSelective(queueUserInfo1);
+            scene = queueUserInfo1.getId();
+        }
         // 临时二维码
         if (str1.equals(codeType)) {
             map.put("expire_seconds", createCodeService.getQrCodeExpire());
@@ -75,14 +91,14 @@ public class CreateCodeServiceImpl implements CreateCodeService {
             Map<String, Object> sceneMap = new HashMap<>();
             Map<String, Object> sceneStrMap = new HashMap<>();
             sceneMap.put("scene", sceneStrMap);
-            sceneStrMap.put("scene_str", accessNo);
+            sceneStrMap.put("scene_str", scene);
             map.put("action_info", sceneMap);
             // 永久二维码
         } else if (str2.equals(codeType)) {
             map.put("action_name", "QR_LIMIT_SCENE");
             Map<String, Object> sceneMap = new HashMap<>();
             Map<String, Object> sceneIdMap = new HashMap<>();
-            sceneIdMap.put("scene_id", accessNo);
+            sceneIdMap.put("scene_id", scene);
 
             sceneMap.put("scene", sceneIdMap);
             map.put("action_info", sceneMap);
@@ -98,8 +114,8 @@ public class CreateCodeServiceImpl implements CreateCodeService {
                 "GET", null, savePath, folderName, fileName, "png");
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
                 + request.getContextPath();
-        String path = codeImagePath + "/"+folderName  + "/" + fileName +".png";
-        return basePath+path;
+        String path = codeImagePath + "/" + folderName + "/" + fileName + ".png";
+        return basePath + path;
     }
 
     /**

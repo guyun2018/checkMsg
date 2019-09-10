@@ -5,6 +5,7 @@ import com.kayisoft.util.CheckoutUtil;
 import com.kayisoft.util.MessageUtil;
 import com.kayisoft.util.WXPayUtils;
 import com.kayisoft.util.XMLUtil;
+import com.kayisoft.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ public class GzController {
 
     @Autowired
     QueueService queueService;
+
     /**
      * 公众号token认证url
      */
@@ -75,60 +77,74 @@ public class GzController {
         //所以我们既然要回复过去，就要颠倒过来
         String fromUser = map.get("ToUserName");
         String toUser = map.get("FromUserName");
-        String accessNo = map.get("EventKey");
-        System.out.println("用户的openid："+toUser);
+        //携带的参数
+        String uuid = map.get("EventKey");
         String content = "";
 
         //先判断是事件消息，还是普通消息
         if (map.get("MsgType").equals("event")) {
+
             //如果是被关注事件，向用户回复内容，只需要将整理好的XML文本参数返回给微信即可
             if (map.get("Event").equals("subscribe")) {
-               String str =  map.get("EventKey");
-                System.out.println("用户参数："+str);
-                //获取accessNo和openid，存入表进行关联
-                //........
+                System.out.println("关注");
+                if (!"".equals(uuid)) {
+                    //获取和openid，存入表进行关联
+                    queueService.addOpenId(uuid.substring(8), toUser);
+                }
                 content = "欢迎关注卡易智慧的测试公众号!";
                 //把数据包返回给微信服务器，微信服务器再推给用户
                 writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+            }
+            if (map.get("Event").equals("unsubscribe")) {
+                System.out.println("取消关注");
+                //获取和openid，存入表进行关联
+                queueService.deleteOpenId(toUser);
             }
             if (map.get("Event").equals("SCAN")) {
                 // 返回消息时ToUserName的值与FromUserName的互换
                 Map<String, String> returnMap = new HashMap<>();
                 returnMap.put("ToUserName", toUser);
                 returnMap.put("FromUserName", fromUser);
-                returnMap.put("CreateTime", System.currentTimeMillis()+"");
+                returnMap.put("CreateTime", System.currentTimeMillis() + "");
                 returnMap.put("MsgType", "text");
                 returnMap.put("Content", "https://www.baidu.com");
 
-                 content = "查询排队情况请回复【1】";
+                content = "查询排队情况请回复【1】";
 
 //                String encryptMsg = WXPublicUtils.encryptMsg(WXPayUtils.mapToXml(returnMap), new Date().getTime()+"", WXPublicUtils.getRandomStr());
 //                return encryptMsg;
-                writer.print(MessageUtil.setMessage(fromUser,toUser,content));
+                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
                 writer.close();
 
             }
-        }else if (map.get("MsgType").equals("text")){
+        } else if (map.get("MsgType").equals("text")) {
             //如果是普通文本消息，先拿到用户发送过来的内容，模拟自动答疑的场景
             String text = map.get("Content");
 
-            if (text.equals("1")){
-                queueService.sendMsg(toUser);
-            }else if (text.equals("2")){
+            if (text.equals("1")) {
+                Result result = queueService.sendMsg(toUser);
+            } else if (text.equals("2")) {
                 content = "如果您购买了本店的产品，订单页面会展示在您的主菜单中";
-            }else if (text.equals("3")){
+                //把数据包返回给微信服务器，微信服务器再推给用户
+                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                writer.close();
+            } else if (text.equals("3")) {
                 content = "如有更多问题，请拨打我们的客服热线：xxxxx";
-            }else {
+                //把数据包返回给微信服务器，微信服务器再推给用户
+                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                writer.close();
+            } else {
                 //否则，不管用户输入什么，都返回给ta这个列表，这也是最常见的场景
-                content = "请输入您遇到的问题编号：\n"+
-                        "1、如何查看退款进度？\n"+
-                        "2、我的订单在哪里查看？\n"+
+                content = "请输入您遇到的问题编号：\n" +
+                        "1、如何查看退款进度？\n" +
+                        "2、我的订单在哪里查看？\n" +
                         "3、其他问题";
+                //把数据包返回给微信服务器，微信服务器再推给用户
+                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                writer.close();
             }
         }
-        //把数据包返回给微信服务器，微信服务器再推给用户
-        writer.print(MessageUtil.setMessage(fromUser,toUser,content));
-        writer.close();
+
     }
 
 }
