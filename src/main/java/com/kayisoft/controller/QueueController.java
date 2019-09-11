@@ -16,6 +16,7 @@ import java.util.List;
  * @Date 2019/9/4
  */
 @Controller
+@RequestMapping(value = "/api")
 public class QueueController {
 
     @Autowired

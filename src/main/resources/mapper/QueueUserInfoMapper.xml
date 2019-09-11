@@ -34,7 +34,7 @@
             #{queueUserInfo.id,jdbcType=VARCHAR},
             #{queueUserInfo.accessNo,jdbcType=VARCHAR},
             #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},
-            #{queueUserInfo.createDate,jdbcType=TIMESTAMP},
+            sysdate,
             #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},
             #{queueUserInfo.openId,jdbcType=VARCHAR}
         )
@@ -47,7 +47,7 @@
             <if test="queueUserInfo.id!=null"> id,</if>
             <if test="queueUserInfo.accessNo!=null"> access_no,</if>
             <if test="queueUserInfo.hospitalCode!=null"> hospital_code,</if>
-             sysdate,
+            <if test="queueUserInfo.createDate!=null">createDate,</if>
             <if test="queueUserInfo.updateDate!=null"> update_date,</if>
             <if test="queueUserInfo.openId!=null"> open_id,</if>
         </trim>

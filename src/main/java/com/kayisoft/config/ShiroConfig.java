@@ -1,7 +1,6 @@
 package com.kayisoft.config;
 
 
-import com.kayisoft.core.filter.VerfityCodeFilter;
 import com.kayisoft.core.shiro.LoginRealm;
 import com.kayisoft.core.shiro.RetryLimitCredentialsMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
@@ -114,7 +113,9 @@ public class ShiroConfig {
         filterMap.put("/logout", "anon");
         filterMap.put("/image/**","anon");
         filterMap.put("/api/login", "anon");
-        filterMap.put("/stomp/**","anon");
+        filterMap.put("/createCode","anon");
+        filterMap.put("/wechat","anon");
+        filterMap.put("/api/**","anon");
         filterMap.put("/**", "authc");
         sfb.setFilterChainDefinitionMap(filterMap);
         return sfb;

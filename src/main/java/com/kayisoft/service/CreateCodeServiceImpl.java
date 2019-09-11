@@ -81,7 +81,7 @@ public class CreateCodeServiceImpl implements CreateCodeService {
             queueUserInfo1.setId(CommonUtil.getGUID());
             queueUserInfo1.setHospitalCode(queueUserInfo.getHospitalCode());
             queueUserInfo1.setAccessNo(queueUserInfo.getAccessNo());
-            queueUserInfoMapper.insertSelective(queueUserInfo1);
+            queueUserInfoMapper.insert(queueUserInfo1);
             scene = queueUserInfo1.getId();
         }
         // 临时二维码
