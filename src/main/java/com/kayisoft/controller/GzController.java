@@ -80,49 +80,68 @@ public class GzController {
         //携带的参数
         String uuid = map.get("EventKey");
         String content = "";
+        String msgType = map.get("Event");
 
         //先判断是事件消息，还是普通消息
         if (map.get("MsgType").equals("event")) {
 
             //如果是被关注事件，向用户回复内容，只需要将整理好的XML文本参数返回给微信即可
-            if (map.get("Event").equals("subscribe")) {
-                System.out.println("关注");
-                if (!"".equals(uuid)) {
+            switch (msgType) {
+                case "subscribe":
+                    System.out.println("关注");
+                    if (!"".equals(uuid)) {
+                        //获取和openid，存入表进行关联
+                        queueService.addOpenId(uuid.substring(8), toUser);
+                    }
+                    content = "欢迎关注卡易智慧的测试公众号!";
+                    //把数据包返回给微信服务器，微信服务器再推给用户
+                    writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                    break;
+                case "unsubscribe":
+                    System.out.println("取消关注");
                     //获取和openid，存入表进行关联
-                    queueService.addOpenId(uuid.substring(8), toUser);
-                }
-                content = "欢迎关注卡易智慧的测试公众号!";
-                //把数据包返回给微信服务器，微信服务器再推给用户
-                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                    queueService.deleteOpenId(toUser);
+                    break;
+                case "scancode_push":
+                    break;
+                case "CLICK":
+                    queueService.sendMsg(toUser);
+                    break;
+                default:
+                    break;
             }
-            if (map.get("Event").equals("unsubscribe")) {
-                System.out.println("取消关注");
-                //获取和openid，存入表进行关联
-                queueService.deleteOpenId(toUser);
-            }
-            if (map.get("Event").equals("SCAN")) {
-                // 返回消息时ToUserName的值与FromUserName的互换
-                Map<String, String> returnMap = new HashMap<>();
-                returnMap.put("ToUserName", toUser);
-                returnMap.put("FromUserName", fromUser);
-                returnMap.put("CreateTime", System.currentTimeMillis() + "");
-                returnMap.put("MsgType", "text");
-                returnMap.put("Content", "https://www.baidu.com");
-
-                content = "查询排队情况请回复【1】";
-
-//                String encryptMsg = WXPublicUtils.encryptMsg(WXPayUtils.mapToXml(returnMap), new Date().getTime()+"", WXPublicUtils.getRandomStr());
-//                return encryptMsg;
-                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
-                writer.close();
-
-            }
+//            if (map.get("Event").equals("subscribe")) {
+//                System.out.println("关注");
+//                if (!"".equals(uuid)) {
+//                    //获取和openid，存入表进行关联
+//                    queueService.addOpenId(uuid.substring(8), toUser);
+//                }
+//                content = "欢迎关注卡易智慧的测试公众号!";
+//                //把数据包返回给微信服务器，微信服务器再推给用户
+//                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+//            }
+//            if (map.get("Event").equals("unsubscribe")) {
+//                System.out.println("取消关注");
+//                //获取和openid，存入表进行关联
+//                queueService.deleteOpenId(toUser);
+//            }
+//            if (map.get("Event").equals("scancode_push")) {
+//
+//
+////                content = "查询排队情况请回复【1】";
+//
+////                String encryptMsg = WXPublicUtils.encryptMsg(WXPayUtils.mapToXml(returnMap), new Date().getTime()+"", WXPublicUtils.getRandomStr());
+////                return encryptMsg;
+////                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+////                writer.close();
+//
+//            }
         } else if (map.get("MsgType").equals("text")) {
             //如果是普通文本消息，先拿到用户发送过来的内容，模拟自动答疑的场景
             String text = map.get("Content");
 
             if (text.equals("1")) {
-                Result result = queueService.sendMsg(toUser);
+//                Result result = queueService.sendMsg(toUser);
             } else if (text.equals("2")) {
                 content = "如果您购买了本店的产品，订单页面会展示在您的主菜单中";
                 //把数据包返回给微信服务器，微信服务器再推给用户

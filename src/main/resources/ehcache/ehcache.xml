@@ -10,7 +10,7 @@
             maxEntriesLocalDisk="10000000"
             diskExpiryThreadIntervalSeconds="120"
             memoryStoreEvictionPolicy="LRU">
-        <persistence strategy="localTempSwap"/>
+        <!--<persistence strategy="localTempSwap"/>-->
     </defaultCache>
 
     <cache name="AccessTokenCache"
@@ -30,4 +30,11 @@
            statistics="true"
            maxEntriesLocalHeap="0">
     </cache>
-
+    <cache name="TokenCache"
+           maxElementsInMemory="30000"
+           eternal="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="35999"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU"/>
+</ehcache>

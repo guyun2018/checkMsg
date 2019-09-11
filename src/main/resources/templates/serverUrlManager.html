@@ -88,8 +88,8 @@
         var title = "编辑";
         id = id ? id : "0";
         var content = "/manager/serverUrlManagerEdit/" + id;
-        // parent.$.InnerAddTab(content, title);
-        window.location.href=content
+        parent.$.InnerAddTab(content, title);
+        // window.location.href=content
     }
 
     function deleteById(id) {

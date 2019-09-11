@@ -10,6 +10,7 @@ import com.kayisoft.util.DateUtil;
 import com.kayisoft.util.GzUrl;
 import com.kayisoft.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -36,6 +37,12 @@ public class QueueServiceImpl implements QueueService {
 
     @Autowired
     QueueUserInfoMapper queueUserInfoMapper;
+
+    @Value("${start_template_id}")
+    private String startTemplateId;
+
+    @Value("${not_start_template_id}")
+    private String notStartTemplateId;
 
     /**
      * 获取检查相关信息
@@ -127,7 +134,7 @@ public class QueueServiceImpl implements QueueService {
                     mapdata.put("hospitalName", templateData4);
                     mapdata.put("checkDate", new TemplateData(bean.getCheckDate(), "#173177"));
                     wechatTemplate.setData(mapdata);
-                    wechatTemplate.setTemplate_id("v42XdeqUZ-Q8PHUg7xJ1idVYwV0e8NMKNteJi_H8dec");
+                    wechatTemplate.setTemplate_id(notStartTemplateId);
                 } else {
                     Map<String, TemplateData> mapdata = new HashMap<>();
                     TemplateData templateData = new TemplateData(bean.getName(), "#173177");
@@ -143,7 +150,7 @@ public class QueueServiceImpl implements QueueService {
                     mapdata.put("number", templateData4);
                     mapdata.put("time", templateData5);
                     wechatTemplate.setData(mapdata);
-                    wechatTemplate.setTemplate_id("cbQZ0GVvr903-KU_8nqxvbVNwgsOG-kioznel2XeENo");
+                    wechatTemplate.setTemplate_id(startTemplateId);
 
                 }
                 ResponseEntity<String> responseEntity = restTemplate.postForEntity(GzUrl.getSendMsgUrl.getUrl() +

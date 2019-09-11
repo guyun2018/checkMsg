@@ -7,10 +7,7 @@ import com.kayisoft.util.PropertiesUtil;
 import com.kayisoft.vo.KendoGrid;
 import com.kayisoft.vo.Result;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -23,8 +20,8 @@ import java.util.*;
 @RequestMapping(value = "/manager")
 public class ManagerController {
 
-    @RequestMapping(value = "/index")
-    public String index() {
+    @RequestMapping(value = "/init")
+    public String init(){
         return "serverUrlManager";
     }
 

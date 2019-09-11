@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+    <title>首页</title>
+
+    <link th:href="@{/static/hplus/css/bootstrap.css}" rel="stylesheet" media="all">
+    <link th:href="@{/static/hplus/css/font-awesome.css}" rel="stylesheet" media="all">
+    <link th:href="@{/static/hplus/css/index.css}" rel="stylesheet" media="all">
+
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+<div id="wrapper">
+
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close">
+            <i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <div style="width: 100%;
+margin: 0 auto;"><img src="/static/image/logo.png" style="width: 100%;width: 90%;margin: 5%;"></div>
+            </ul>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+    <!--右侧部分开始-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right nav-toolbar">
+                    <li>
+                        <a  data-toggle="modal" data-target="#myModal"> <i class="glyphicon glyphicon-info-sign
+"></i>关于
+                        </a>
+
+                    </li>
+                    <li>
+                        <div style="width: 150px;"><img th:src="@{/static/image/logo.png}"
+                                                        style="width: 100%;"></div>
+                    </li>
+                    <li class="dropdown hidden-xs">
+                        <a href="javascript:void(0)" onclick="loginOut()"> <i class="glyphicon glyphicon-off"></i>退出 </a>
+                    </li>
+                    <li class="dropdown hidden-xs">
+                        <a class="right-sidebar-toggle" aria-expanded="false"> <i class="fa fa-tasks"></i>主题 </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">关于</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="#" class="form-horizontal" style="margin-top:5px;">
+                            <div class="form-group">
+                                <div class="col-sm-12" style="margin-bottom:10px; ">
+                                    <label class="col-sm-2 control-label">软件名称：</label>
+
+                                    <div class="col-sm-6" style="margin-top: 5px;">
+                                        MDT后台管理系统（MDT)
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12" style="margin-bottom:10px; ">
+                                    <label class="col-sm-2 control-label">规格型号：</label>
+
+                                    <div class="col-sm-6" style="margin-top: 5px;">
+                                        Kayisoft MDT V1.0
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12" style="margin-bottom:10px; ">
+                                    <label class="col-sm-2 control-label">注册：</label>
+
+                                    <div class="col-sm-6" style="margin-top: 5px;">
+                                        浙江卡易智慧医疗有限公司
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12" style="margin-bottom:10px; ">
+                                    <label class="col-sm-2 control-label">技术服务：</label>
+
+                                    <div class="col-sm-6" style="margin-top: 5px;">
+                                        浙江卡易智慧医疗科技有限公司
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12" style="margin-bottom:10px; ">
+                                    <label class="col-sm-2 control-label">服务电话：</label>
+
+                                    <div class="col-sm-6" style="margin-top: 5px;">
+                                        400-108-1882
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row content-tabs">
+            <button class="roll-nav roll-left J_tabLeft">
+                <i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs J_menuTabs">
+                <div class="page-tabs-content">
+                    <a href="javascript:;" class="active J_menuTab" data-index="0" data-id="index_v1.html">首页</a>
+                </div>
+            </nav>
+            <button class="roll-nav roll-right J_tabRight">
+                <i class="fa fa-forward"></i>
+            </button>
+            <button class="roll-nav roll-right J_tabRefresh" style="height: 40px;width: 60px;outline: 0;">
+                <i class="fa fa fa-refresh"></i> 刷新
+            </button>
+            <div class="btn-group roll-nav roll-right">
+                <button class="dropdown J_tabClose" data-toggle="dropdown">
+                    关闭操作<span class="caret"></span>
+
+                </button>
+                <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                    <li class="J_tabShowActive">
+                        <a>定位当前选项卡</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="J_tabCloseAll">
+                        <a>关闭全部选项卡</a>
+                    </li>
+                    <li class="J_tabCloseOther">
+                        <a>关闭其他选项卡</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row J_mainContent" id="content-main">
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="/manager/init" frameborder="0" data-id="index_v1.html" seamless></iframe>
+        </div>
+        <div class="footer">
+            <div class="pull-right">
+                &copy; 卡易
+            </div>
+        </div>
+    </div>
+    <!--右侧部分结束-->
+    <!--右侧边栏开始-->
+    <div id="right-sidebar">
+        <div class="sidebar-container">
+
+            <ul class="nav nav-tabs navs-3">
+
+                <li class="active">
+                    <a data-toggle="tab" href="#tab-1"> <i class="fa fa-gear"></i> 主题 </a>
+                </li>
+                <li class="">
+                    <a data-toggle="tab" href="#tab-2"> 通知</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="sidebar-title">
+                        <h3><i class="fa fa-comments-o"></i> 主题设置</h3>
+                        <small><i class="fa fa-tim"></i> 你可以从这里选择和预览主题的布局和样式，这些设置会被保存在本地，下次打开的时候会直接应用这些设置。</small>
+                    </div>
+                    <div class="skin-setttings">
+                        <div class="title">
+                            主题设置
+                        </div>
+                        <div class="setings-item">
+                            <span>收起左侧菜单</span>
+                            <div class="switch">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="collapsemenu">
+                                    <label class="onoffswitch-label" for="collapsemenu"> <span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setings-item">
+                            <span>固定顶部</span>
+
+                            <div class="switch">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="fixednavbar" class="onoffswitch-checkbox" id="fixednavbar">
+                                    <label class="onoffswitch-label" for="fixednavbar"> <span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setings-item">
+                            <span> 固定宽度 </span>
+
+                            <div class="switch">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="boxedlayout" class="onoffswitch-checkbox" id="boxedlayout">
+                                    <label class="onoffswitch-label" for="boxedlayout"> <span class="onoffswitch-inner"></span> <span class="onoffswitch-switch"></span> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="title">
+                            皮肤选择
+                        </div>
+                        <div class="setings-item default-skin nb">
+                            <span class="skin-name "> <a href="#" class="s-skin-0"> 默认皮肤 </a> </span>
+                        </div>
+                        <div class="setings-item blue-skin nb">
+                            <span class="skin-name "> <a href="#" class="s-skin-1"> 蓝色主题 </a> </span>
+                        </div>
+                        <div class="setings-item yellow-skin nb">
+                            <span class="skin-name "> <a href="#" class="s-skin-3"> 黄色/紫色主题 </a> </span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+<script th:src="@{/static/hplus/js/jquery.min.js}"></script>
+<script th:src="@{/static/hplus/js/bootstrap.js}"></script>
+<script th:src="@{/static/layer/layer.js}"></script>
+<script th:src="@{/static/hplus/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/static/hplus/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/static/hplus/js/hplus.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/hplus/js/contabs.js}"></script>
+<script type="text/javascript">
+
+    //加载 导航菜单
+
+    $.post("/index/getMenuTree", function(data) {
+
+
+        getMenu(data.results);
+    })
+
+    function getMenu(data) {
+        var result = data;
+        console.log(result)
+        for (var i in result) {
+            var menuHtml = "";
+            var parent = result[i];
+            menuHtml = menuHtml + '<li>';
+            //一级 模块 目录 或者页面
+            var appUrl = "${path}";
+            //第三方页面
+            var pHref = parent["url"] ? 'class="J_menuItem" href="' + appUrl + parent["url"] + '"' : 'href="#"';
+            menuHtml = menuHtml + '<a ' + pHref + '>';
+            if (parent["icon"] != "") {
+                menuHtml = menuHtml + '<i class="' + parent["icon"] + '"></i>';
+            }
+            menuHtml = menuHtml + '<span class="nav-label">' + parent["menuName"] + '</span>';
+            // 用于 导航栏缩小时 隐藏文本
+
+            if (parent.children.length > 0) {
+                menuHtml = menuHtml + '<span class="fa arrow"></span>';
+                //箭头
+            }
+            menuHtml = menuHtml + '</a>';
+
+            if (parent.children&&parent.children.length > 0) {
+
+                menuHtml = menuHtml + '<ul class="nav nav-second-level">';
+                //二级菜单
+
+                for (var i in parent.children) {
+
+                    var child = parent.children[i];
+                    //二级页面
+
+                    menuHtml = menuHtml + '<li>';
+                    //                  var appAttr=i==0?'data-index="0"':'';
+                    var cHref = child["url"] == "" ? 'href="#"' : 'class="J_menuItem" href="' + child["url"] + '"';
+                    menuHtml = menuHtml + '<a ' + cHref + ' >';
+                    //拼接url
+                    if (parent["icon"] != "") {
+                        menuHtml = menuHtml + '<i class="' + child["icon"] + '"></i>';
+                    }
+                    menuHtml = menuHtml + child["menuName"];
+                    if (child.children&&child.children.length > 0) {
+                        menuHtml = menuHtml + '<span class="fa arrow"></span>';
+                        //箭头
+                    }
+                    menuHtml = menuHtml + '</a>';
+                    if (child.children&&child.children.length > 0) {
+
+                        menuHtml = menuHtml + '<ul class="nav nav-third-level">';
+
+                        for (var i in child.children) {
+
+                            var grandson = child.children[i];
+                            //三级页面
+                            menuHtml = menuHtml + '<li>';
+                            menuHtml = menuHtml + '<a class="J_menuItem" href="${path}' + grandson["url"] + '">';
+                            //拼接url
+                            if (parent["iconCls"] != "") {
+                                menuHtml = menuHtml + '<i class="' + grandson["icon"] + '"></i>';
+                            }
+                            menuHtml = menuHtml + grandson["menuName"];
+
+                            menuHtml = menuHtml + '</a>';
+                            menuHtml = menuHtml + "</li>"
+                        }
+                        menuHtml = menuHtml + "</ul>"
+
+                    }
+
+                    menuHtml = menuHtml + "</li>"
+
+                }
+
+                menuHtml = menuHtml + "</ul>"
+            }
+
+            menuHtml = menuHtml + "</li>"
+            $("#side-menu").append(menuHtml);
+        }
+
+        //初始化 左侧导航栏
+        $("#side-menu").metisMenu();
+    }
+    function loginOut() {
+        $.post("/logout", function(result) {
+            location.href = "/login";
+        });
+        return false;
+    }
+</script>
+</html>

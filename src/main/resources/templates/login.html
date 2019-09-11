@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{/static/css/login.css}"  media="all">
+</head>
+<body>
+<div id="Wrap">
+
+    <div id="LoginArea">
+        <!--logo-->
+        <h1>
+            <span class="ulite">ULite</span>
+        </h1>
+        <div class="LoginLine"></div>
+
+        <div class="LoginContainer">
+            <form id="submitForm" >
+                <div class="LoginInfor">
+
+                    <div class="infobox">
+                        <!--手机号-->
+                        <div class="row">
+                            <span>用户名:</span>
+                            <div class="inputbox"><input title="" class="input_login" id="username">
+                            </div>
+                        </div>
+                        <!--验证码-->
+                        <div class="row">
+                            <span>密码:</span>
+                            <div class="inputbox">
+                                <input title="" class="input_login" id="password" type="password">
+                                <!--<#&#45;&#45;<input type="button" id="btnPwd" value="发送验证码" onclick="settime(this);">&ndash;&gt;-->
+                            </div>
+
+                        </div>
+                        <!--<div class="row">-->
+                            <!--<span>验证码:</span>-->
+                            <!--<div class="inputbox">-->
+                                <!--<input title="" class="input_login" id="code" type="password">-->
+                                <!--&lt;!&ndash;<#&#45;&#45;<input type="button" id="btnPwd" value="发送验证码" onclick="settime(this);">&ndash;&gt;&ndash;&gt;-->
+                            <!--</div>-->
+                            <!--<div class="half">-->
+                                <!--<img  class="codeImg" scr="" id="codeImg">-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                    </div>
+
+                    <!--登录按钮-->
+                    <input type="submit" id="imgLogin" value="登录" src="/Assets/image/login/btn_login.png">
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--底部-->
+    <div id="FootArea">
+        <!--<#&#45;&#45;&ndash;&gt;-->
+        <!--<#&#45;&#45;<div class="btnbox">&ndash;&gt;-->
+        <!--<#&#45;&#45;<button type="button" class="bottombtn">&ndash;&gt;-->
+            <!--<#&#45;&#45;<span>用户注册</span>&ndash;&gt;-->
+            <!--<#&#45;&#45;</button>&ndash;&gt;-->
+        <!--<#&#45;&#45;<button type="button" class="bottombtn">&ndash;&gt;-->
+            <!--<#&#45;&#45;<span>忘记密码</span>&ndash;&gt;-->
+            <!--<#&#45;&#45;</button>&ndash;&gt;-->
+        <!--<#&#45;&#45;</div>&ndash;&gt;-->
+        <div class="companyinfo">
+            <div class="footerLicense_Bold">咨询热线：400-108-1882</div>
+            <div class="footerLicense_Bold">©版权所有<a href="http://www.kayisoft.com/" class="footerLicense_Bold" target="_blank">浙江卡易智慧医疗科技有限公司</a></div>
+        </div>
+    </div>
+</div>
+<script src="/static/jquery/jquery-3.2.1.min.js" charset="utf-8"></script>
+<script src="/static/layer/layer.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function () {
+        //判断时候在Iframe框架内,在则刷新父页面
+        if (self != top) {
+            alert("请重新登录");
+            parent.location.reload(true);
+        }
+
+        //判断登录页在弹框里面
+        if ($(".dialog-button").length == 1) {
+
+            alert("请重新登录");
+            parent.location.reload(true);
+        }
+    })
+
+    $("#submitForm").submit(function () {
+        var data = {
+            username: $('#username').val(),
+            password: $('#password').val(),
+            // code: $('#code').val(),
+        };
+        $.ajax({
+            type: 'post',
+            url: '/login',
+            data: data,
+            dataType: 'json',
+            success: function (result) {
+                if(result.success){
+                    window.location.href='/index';
+                }else {
+                    layer.alert(result.msg);
+                }
+            }
+        })
+        return false;
+    })
+
+    $("#codeImg").click(function () {
+        var url = "/getCode?" + new Date().getTime();
+        this.src = url;
+    }).click().show();
+    $('#codeImg').on('mouseover', function () {
+        layer.tips('点击刷新验证码', this, {time: 1000});
+    });
+</script>
+</body>
+</html>

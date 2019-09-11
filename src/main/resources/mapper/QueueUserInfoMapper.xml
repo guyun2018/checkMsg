@@ -47,7 +47,7 @@
             <if test="queueUserInfo.id!=null"> id,</if>
             <if test="queueUserInfo.accessNo!=null"> access_no,</if>
             <if test="queueUserInfo.hospitalCode!=null"> hospital_code,</if>
-            <if test="queueUserInfo.createDate!=null"> sysdate,</if>
+             sysdate,
             <if test="queueUserInfo.updateDate!=null"> update_date,</if>
             <if test="queueUserInfo.openId!=null"> open_id,</if>
         </trim>
