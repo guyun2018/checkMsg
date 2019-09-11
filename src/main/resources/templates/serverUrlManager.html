@@ -1,14 +1,8 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
+<head th:replace="/common/template :: header(~{::title},~{::link},~{::style})">
     <meta charset="UTF-8">
-    <link th:href="@{/static/kendoui/styles/kendo.common.min.css}" rel="stylesheet">
-    <link th:href="@{/static/kendoui/styles/kendo.silver.min.css}" rel="stylesheet">
-    <link th:href="@{/static/hplus/css/bootstrap.css}" rel="stylesheet">
-    <link th:href="@{/static/hplus/css/font-awesome.css}" rel="stylesheet">
-    <link th:href="@{/static/hplus/css/animate.css}" rel="stylesheet">
-    <link th:href="@{/static/css/base.css}" rel="stylesheet">
     <title>医院服务路径管理</title>
 </head>
 <body class="gray-bg" style="height:calc(100% - 10px);">
@@ -19,7 +13,7 @@
                 <form class="form-inline" id="searchForm">
 
                 </form>
-                <button type="button" class="btn btn-primary" onclick="openQuartzEdit('')">
+                <button type="button" class="btn btn-primary" onclick="openServerEdit('')">
                     <span class="glyphicon glyphicon-plus"></span> 新增
                 </button>
             </div>
@@ -30,9 +24,7 @@
     </div>
 </div>
 </body>
-<!--<script th:replace="/common/template::script"></script>-->
-<script th:src="@{/static/jquery/jquery-3.2.1.min.js}" charset="utf-8"></script>
-<script type="text/javascript" th:src="@{/static/kendoui/js/kendo.all.min.js}"></script>
+<script th:replace="/common/template::script"></script>
 <script type="text/javascript">
     var dataSource;
     $(document).ready(function () {
@@ -92,7 +84,7 @@
     })
 
     //编辑
-    function openQuartzEdit(id) {
+    function openServerEdit(id) {
         var title = "编辑";
         id = id ? id : "0";
         var content = "/manager/serverUrlManagerEdit/" + id;
@@ -211,7 +203,7 @@
 
 <script id="opt" type="text/x-kendo-template">
     <button type="button" class="btn btn-editor btn-sm"
-            onclick=openQuartzEdit("#:id#")>修改
+            onclick=openServerEdit("#:id#")>修改
     </button>
 </script>
 

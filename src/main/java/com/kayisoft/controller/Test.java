@@ -17,26 +17,7 @@ import java.util.*;
  * @Date 2019/9/3
  */
 @Controller
-@PropertySource(value = {"classpath:test.properties"})
 public class Test {
-
-    @Value("${test}")
-    private String test;
-
-    @RequestMapping(value = "/show")
-    @ResponseBody
-    public String show() {
-        String str = test;
-        return str;
-    }
-
-//    @RequestMapping(value = "/refresh")
-//    @ResponseBody
-//    public String refresh(){
-//        String str = test;
-//        return str;
-//    }
-
 
     @RequestMapping(value = "/test")
     public String test(HttpServletRequest request) {
@@ -52,19 +33,7 @@ public class Test {
         request.setAttribute("users", list);
         return "test";
     }
-//    public static void readProperties() {
-//        Properties props = new Properties();
-//        InputStream fis = Createxsxl.class
-//                .getResourceAsStream("/test.properties");
-//        try {
-//            props.load(fis);
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        String name = props.getProperty(key);
-//        System.out.println(name);
-//    }
+
 
     /**
      * 添加配置文件信息
@@ -102,7 +71,7 @@ public class Test {
         String value = request.getParameter("value");
         Map<String, String> map = new HashMap<>();
         map.put(key, value);
-        return "";
+        return "b";
     }
 
 }

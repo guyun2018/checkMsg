@@ -1,6 +1,7 @@
 package com.kayisoft.model;
 
 /**
+ * 公众号消息内容模板
  * @Author tianqiu.lan
  * @Date 2019/9/9
  */

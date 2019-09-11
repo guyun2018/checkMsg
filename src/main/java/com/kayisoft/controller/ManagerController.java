@@ -57,10 +57,12 @@ public class ManagerController {
 
     @RequestMapping(value = "/serverUrlManagerEdit/{id}")
     public String serverUrlManagerEdit(@PathVariable("id") String id, HttpServletRequest request) {
-        Map<String, Object> map = PropertiesUtil.getProfileByClassLoader("hospitalUrl.properties");
         ManagerQueueBean managerQueueBean = new ManagerQueueBean();
-        managerQueueBean.setHospitalCode(id);
-        managerQueueBean.setUrl(map.get(id).toString());
+        if (!"0".equals(id)) {
+            Map<String, Object> map = PropertiesUtil.getProfileByClassLoader("hospitalUrl.properties");
+            managerQueueBean.setHospitalCode(id);
+            managerQueueBean.setUrl(map.get(id).toString());
+        }
         request.setAttribute("bean", managerQueueBean);
         return "serverUrlManagerEdit";
     }

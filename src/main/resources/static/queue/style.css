@@ -92,7 +92,7 @@ body * {
 #pagination {
 	position: absolute;
 	width   : 100%;
-	top     : 20px;
+	top     : 10px;
 	z-index : 10;
 }
 

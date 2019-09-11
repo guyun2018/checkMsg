@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
+ * 公众号消息模板
  * @Author tianqiu.lan
  * @Date 2019/9/9
  */
