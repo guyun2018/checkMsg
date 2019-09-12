@@ -22,7 +22,7 @@
     </sql>
 
     <!--auto generated Code-->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="queueUserInfo.id">
+    <insert id="insert">
         INSERT INTO queue_user_info (
             id,
             access_no,
@@ -108,7 +108,7 @@
       WHERE  ACCESS_NO = #{accessNo,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
     </select>
     <select id="selectHospitalCode" resultMap="BaseResultMap">
-      SELECT HOSPITAL_CODE
+      SELECT <include refid="Base_Column_List"/>
       FROM QUEUE_USER_INFO
       WHERE  ACCESS_NO = #{accessNo,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
     </select>

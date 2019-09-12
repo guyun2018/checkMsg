@@ -115,6 +115,7 @@ public class ShiroConfig {
         filterMap.put("/api/login", "anon");
         filterMap.put("/createCode","anon");
         filterMap.put("/wechat","anon");
+        filterMap.put("/favicon.ico", "anon");
         filterMap.put("/api/**","anon");
         filterMap.put("/**", "authc");
         sfb.setFilterChainDefinitionMap(filterMap);
