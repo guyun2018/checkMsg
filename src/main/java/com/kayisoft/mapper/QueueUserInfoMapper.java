@@ -20,5 +20,7 @@ public interface QueueUserInfoMapper {
 
     QueueUserInfo selectHospitalCode(QueueUserInfo queueUserInfo);
 
+    List<QueueUserInfo> selectInfoByOpenId(String openId);
+
     void deleteByOpenId(String openId);
 }

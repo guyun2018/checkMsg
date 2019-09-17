@@ -25,6 +25,9 @@
                 <div>您前面还有<span class="emphasize" th:text="${info.number}">3</span>位在等候 预计等待时间<span class="emphasize"
                                                                                                     th:text="${info.time}"></span>分钟
                 </div>
+                <div>请合理安排时间，提早前往<span class="emphasize"
+                             th:text="${info.checkDep}"></span>做检查
+                </div>
                 <div>备注：如需查看其他医院的检查信息，请关注下方公众号</div>
             </div>
             <div class="queueInfo" th:if="${info.isStart ==0}">

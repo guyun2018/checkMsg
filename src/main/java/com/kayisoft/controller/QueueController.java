@@ -61,4 +61,10 @@ public class QueueController {
     public Result getOpenId(@RequestBody QueueUserInfo queueUserInfo){
         return queueService.getOpenId(queueUserInfo);
     }
+
+    @RequestMapping(value = "/sendTemplateMsg",method = RequestMethod.POST)
+    @ResponseBody
+    public Result sendTemplateMsg(@RequestBody QueueBean queueBean){
+        return queueService.sendTemplateMsg(queueBean);
+    }
 }

@@ -16,6 +16,9 @@
                 <button type="button" class="btn btn-primary" onclick="openServerEdit('')">
                     <span class="glyphicon glyphicon-plus"></span> 新增
                 </button>
+                <button type="button" class="form-control btn btn-success" id="xmlExport"
+                        style="float: right;width: auto"/>
+                导出
             </div>
         </div>
         <div class="ibox-content" style="height:calc(100% - 50px);">
@@ -127,6 +130,20 @@
             })
         });
     }
+
+    $("#xmlExport").click(function () {
+        $.ajax({
+            url: '/manager/export',
+            type: "get",
+            beforeSend: function () {
+                layer.msg('正在处理，请稍等..', {
+                    icon: 16
+                });
+            },
+            success: function (e) {
+            }
+        })
+    });
 
     function startById(id) {
         var allData = {

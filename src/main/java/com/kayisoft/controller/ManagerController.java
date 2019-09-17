@@ -3,13 +3,16 @@ package com.kayisoft.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.kayisoft.model.ManagerQueueBean;
+import com.kayisoft.util.ExportTxtUtil;
 import com.kayisoft.util.PropertiesUtil;
 import com.kayisoft.vo.KendoGrid;
 import com.kayisoft.vo.Result;
+import org.apache.http.HttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -62,5 +65,11 @@ public class ManagerController {
         }
         request.setAttribute("bean", managerQueueBean);
         return "serverUrlManagerEdit";
+    }
+
+    @RequestMapping(value = "/export")
+    public void export(HttpServletResponse response){
+        Map<String, Object> map = PropertiesUtil.getProfileByClassLoader("hospitalUrl.properties");
+        ExportTxtUtil.exportTxt(map,response);
     }
 }

@@ -3,7 +3,6 @@ package com.kayisoft.controller;
 import com.kayisoft.service.QueueService;
 import com.kayisoft.util.CheckoutUtil;
 import com.kayisoft.util.MessageUtil;
-import com.kayisoft.util.WXPayUtils;
 import com.kayisoft.util.XMLUtil;
 import com.kayisoft.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -102,10 +98,16 @@ public class GzController {
                     //获取和openid，存入表进行关联
                     queueService.deleteOpenId(toUser);
                     break;
+                //扫码
                 case "scancode_push":
                     break;
+                //查看报告
                 case "CLICK":
-                    queueService.sendMsg(toUser);
+                    Result result = queueService.sendMsg(toUser);
+                    if (!result.isSuccess()){
+                        content = "未查询到您的检查信息";
+                        writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                    }
                     break;
                 default:
                     break;
@@ -143,12 +145,12 @@ public class GzController {
             if (text.equals("1")) {
 //                Result result = queueService.sendMsg(toUser);
             } else if (text.equals("2")) {
-                content = "如果您购买了本店的产品，订单页面会展示在您的主菜单中";
+                content = "";
                 //把数据包返回给微信服务器，微信服务器再推给用户
                 writer.print(MessageUtil.setMessage(fromUser, toUser, content));
                 writer.close();
             } else if (text.equals("3")) {
-                content = "如有更多问题，请拨打我们的客服热线：xxxxx";
+                content = "";
                 //把数据包返回给微信服务器，微信服务器再推给用户
                 writer.print(MessageUtil.setMessage(fromUser, toUser, content));
                 writer.close();

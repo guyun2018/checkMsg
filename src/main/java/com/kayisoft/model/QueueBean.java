@@ -34,6 +34,12 @@ public class QueueBean {
 
     private String today;
 
+    private String openId;
+
+    private String checkDep;
+
+    private Integer temp;
+
     public QueueBean() {
     }
 

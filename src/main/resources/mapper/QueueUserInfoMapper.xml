@@ -115,5 +115,11 @@
     <delete id="deleteByOpenId">
       DELETE FROM QUEUE_USER_INFO WHERE OPEN_ID = #{openId,jdbcType=VARCHAR}
     </delete>
+    <select id="selectInfoByOpenId" resultMap="BaseResultMap">
+      SELECT
+        ACCESS_NO,HOSPITAL_CODE
+      FROM QUEUE_USER_INFO
+      WHERE OPEN_ID = #{openId,jdbcType=VARCHAR}
+    </select>
 </mapper>
 

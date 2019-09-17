@@ -19,18 +19,37 @@ public interface QueueService {
     List<QueueBean> getQueueInfo(QueueBean queueBean);
 
 
-
     /**
-     *生成二维码
+     * 获取openId判断是否已关注
      * @param queueUserInfo queueUserInfo
      * @return result
      */
     Result getOpenId(QueueUserInfo queueUserInfo);
 
+    /**
+     * 发送模板消息
+     * @param openId openId
+     * @return result
+     */
     Result sendMsg(String openId);
 
-
+    /**
+     * 插入openId（关注）
+     * @param uuid uuid
+     * @param openId openId
+     */
     void addOpenId(String uuid,String openId);
 
+    /**
+     * 删除openId(取消关注)
+     * @param openId openId
+     */
     void deleteOpenId(String openId);
+
+    /**
+     * 发送消息模板（定时）
+     * @param queueBean bean
+     * @return result
+     */
+    Result sendTemplateMsg(QueueBean queueBean);
 }
