@@ -66,7 +66,7 @@ public class CreateCodeServiceImpl implements CreateCodeService {
      * @return result
      */
     @Override
-    public String createCode(QueueUserInfo queueUserInfo) {
+    public String createCode(QueueUserInfo queueUserInfo) throws Exception {
         //获取accessoken
         String wxAccessToken = accessTokenService.getAccToken("AccessTokenCache");
         System.out.println("获取二维码的token:" + wxAccessToken);
@@ -114,8 +114,12 @@ public class CreateCodeServiceImpl implements CreateCodeService {
         String folderName = DateUtil.getCurrentDate("yyyy-MM-dd");
         //以检查唯一号为文件名
         String fileName = CommonUtil.getGUID();
-        String filePath = HttpUtils.httpsRequestPicture("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + URLEncoder.encode(ticket),
-                "GET", null, savePath, folderName, fileName, "png");
+        try {
+            String filePath = HttpUtils.httpsRequestPicture("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + URLEncoder.encode(ticket),
+                    "GET", null, savePath, folderName, fileName, "png");
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
                 + request.getContextPath();
         String path = codeImagePath + "/" + folderName + "/" + fileName + ".png";

@@ -55,34 +55,35 @@ public class QueueServiceImpl implements QueueService {
      * @return result
      */
     @Override
-    public List<QueueBean> getQueueInfo(QueueBean queueBean) {
+    public QueueBean getQueueInfo(QueueBean queueBean) {
         Map<String, Object> map = PropertiesUtil.getProfileByClassLoader("hospitalUrl.properties");
-        String serverUrl= map.get(queueBean.getHospitalCode()).toString();
+        String serverUrl = map.get(queueBean.getHospitalCode()).toString();
         //获取检查排队信息List(包括姓名、检查号、检查时间、前面几人、排队名次？)
 //        String forObject = restTemplate.getForObject("XXXX?accessNo=abcde", String.class);
 //        JSONObject ojb = JSONObject.parseObject(forObject);
 //        QueueBean queueBean = JSON.toJavaObject(ojb, QueueBean.class);
-        List<QueueBean> list = new ArrayList<>();
-        if (queueBean.getHospitalCode().equals("fer110")) {
-            list.add(new QueueBean("3383075", "47068179533038211A1001", "乐清市第二人民医院",
-                    "周宇婷", "A55", "A100", 5, "USMF", 10, 1));
-            list.add(new QueueBean("201807015487", "47000593033030211A1001", "温州医科大学附属第二医院",
-                    "周宇婷", "A101", "A188", 10, "CT", DateUtil.dayDiff(DateUtil.getCurrentDate("yyyy-MM-dd"), "2019-9-15"), 0, "2019-9-15", DateUtil.getCurrentDate("yyyy-MM-dd")));
-        } else {
-            QueueBean queueBean2 = new QueueBean("3383075", "47068179533038211A1001", "乐清市第二人民医院",
-                    "邹乙丑", "A55", "A100", 5, "USMF", 10, 1);
-            queueBean2.setCheckDep("DR机房");
-            list.add(queueBean2);
-            QueueBean queueBean1 = new QueueBean("201807015487", "47000593033030211A1001", "温州医科大学附属第二医院",
-                    "邹乙丑", "A101", "A188", 10, "CT", DateUtil.dayDiff(DateUtil.getCurrentDate("yyyy-MM-dd"), "2019-9-11"), 0, "2019-9-11", DateUtil.getCurrentDate("yyyy-MM-dd"));
-            list.add(queueBean1);
+        QueueBean queueBean1 = new QueueBean();
+        queueBean1.setHospitalCode("47068179533038211A1001");
+        queueBean1.setAccessionNo("abcde110");
+        queueBean1.setQueueNo("A05");
+        queueBean1.setCallId("A10");
+        queueBean1.setBeforeNum(5);
+        queueBean1.setPatientName("周宇婷");
+        queueBean1.setCallRoom("五楼彩超1室");
+        queueBean1.setScheduledModality("USMF");
+        queueBean1.setScheduledDate("2019-09-17 16:00:36");
+        queueBean1.setIsStart(1);
+        //模拟type为1时消息模板自动回复
+        if (queueBean.getType() == 1) {
+            Result result = sendTemplateMsg(queueBean1);
         }
-        return list;
+        return queueBean1;
     }
 
 
     /**
      * 获取openId判断是否已关注
+     *
      * @param queueUserInfo queueUserInfo
      * @return result
      */
@@ -91,14 +92,15 @@ public class QueueServiceImpl implements QueueService {
         //从表中查询openId
         QueueUserInfo userInfo = queueUserInfoMapper.selectOpenId(queueUserInfo);
         if (userInfo != null) {
-            return new Result(true, "已关注",userInfo.getOpenId());
+            return new Result(true, "已关注", userInfo.getOpenId());
         } else {
-            return new Result(false, "未关注",null);
+            return new Result(false, "未关注", null);
         }
     }
 
     /**
-     * 发送模板消息(自主查询)
+     * 发送模板消息(自主查询，可查询相关检查)
+     *
      * @param openId openId
      * @return result
      */
@@ -115,21 +117,21 @@ public class QueueServiceImpl implements QueueService {
         WechatTemplate wechatTemplate = new WechatTemplate();
         wechatTemplate.setTouser(openId);
         wechatTemplate.setTopcolor("#FF0000");
-        if (list.size()>0) {
+        if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 QueueBean queueBean = new QueueBean();
-                queueBean.setTemp(1);
+                queueBean.setType(1);
                 BeanUtils.copyProperties(list.get(i), queueBean);
                 //根据医院代码和访问号去每个医院查询相关检查信息（多条）
-                List<QueueBean> queueInfo = getQueueInfo(queueBean);
+//                List<QueueBean> queueInfo = getQueueInfo(queueBean);
+                List<QueueBean> queueInfo = new ArrayList<>();
                 for (QueueBean bean : queueInfo) {
                     //检查未开始
                     Map<String, TemplateData> mapdata = new HashMap<>();
                     if (bean.getIsStart() == 0) {
                         //未开始的模板消息
-                        mapdata.put("name", new TemplateData(bean.getName(), "#173177"));
-                        mapdata.put("modality", new TemplateData(bean.getModality(), "#173177"));
-                        mapdata.put("today", new TemplateData(bean.getToday(), "#173177"));
+                        mapdata.put("name", new TemplateData(bean.getPatientName(), "#173177"));
+                        mapdata.put("modality", new TemplateData(bean.getScheduledModality(), "#173177"));
                         mapdata.put("time", new TemplateData(bean.getTime().toString(), "#173177"));
                         mapdata.put("hospitalName", new TemplateData(bean.getHospitalName(), "#173177"));
                         mapdata.put("checkDate", new TemplateData(bean.getCheckDate(), "#173177"));
@@ -137,14 +139,7 @@ public class QueueServiceImpl implements QueueService {
                         wechatTemplate.setTemplate_id(notStartTemplateId);
                     } else {
                         //正在排队的模板消息
-                        mapdata.put("name", new TemplateData(bean.getName(), "#173177"));
-                        mapdata.put("queueNo", new TemplateData(bean.getQueueNo(), "#173177"));
-                        mapdata.put("peopleNo", new TemplateData(bean.getPeopleNo(), "#173177"));
-                        mapdata.put("modality", new TemplateData(bean.getModality(), "#173177"));
-                        mapdata.put("number", new TemplateData(bean.getNumber().toString(), "#173177"));
-                        mapdata.put("time", new TemplateData(bean.getTime().toString(), "#173177"));
-                        wechatTemplate.setData(mapdata);
-                        wechatTemplate.setTemplate_id(startTemplateId);
+                        Result result = sendTemplateMsg(bean);
 
                     }
                     ResponseEntity<String> responseEntity = restTemplate.postForEntity(GzUrl.getSendMsgUrl.getUrl() +
@@ -153,14 +148,15 @@ public class QueueServiceImpl implements QueueService {
                 }
             }
             return new Result(true, "已发送");
-        }else {
-            return new Result(false,"查询不到数据");
+        } else {
+            return new Result(false, "查询不到数据");
         }
     }
 
     /**
      * 插入openId（关注）
-     * @param uuid uuid
+     *
+     * @param uuid   uuid
      * @param openId openId
      */
     @Override
@@ -168,12 +164,17 @@ public class QueueServiceImpl implements QueueService {
         QueueUserInfo queueUserInfo = new QueueUserInfo();
         queueUserInfo.setId(uuid);
         queueUserInfo.setOpenId(openId);
+        //插入openId
         queueUserInfoMapper.updateByPrimaryKeySelective(queueUserInfo);
-
+        //根据uuid前置机发送模板消息
+        List<QueueUserInfo> list = queueUserInfoMapper.selectAccNoById(uuid);
+        castToSendTemplate(list);
     }
+
 
     /**
      * 删除openId(取消关注)
+     *
      * @param openId openId
      */
     @Override
@@ -183,28 +184,30 @@ public class QueueServiceImpl implements QueueService {
 
     /**
      * 发送消息模板（定时）
+     *
      * @param queueBean bean
      * @return result
      */
     @Override
     public Result sendTemplateMsg(QueueBean queueBean) {
         QueueUserInfo queueUserInfo = new QueueUserInfo();
-        queueUserInfo.setAccessNo(queueBean.getAccessNo());
+        queueUserInfo.setAccessNo(queueBean.getAccessionNo());
         queueUserInfo.setHospitalCode(queueBean.getHospitalCode());
         Result openIdInfo = getOpenId(queueUserInfo);
-        if (!openIdInfo.isSuccess()){
-            return new Result(false,"找不到openId",null);
+        if (!openIdInfo.isSuccess()) {
+            return new Result(false, "找不到openId", null);
         }
         WechatTemplate wechatTemplate = new WechatTemplate();
         wechatTemplate.setTouser(openIdInfo.getObj().toString());
         wechatTemplate.setTopcolor("#FF0000");
         Map<String, TemplateData> mapdata = new HashMap<>();
-        mapdata.put("name", new TemplateData(queueBean.getName(), "#173177"));
+        mapdata.put("name", new TemplateData(queueBean.getPatientName(), "#173177"));
         mapdata.put("queueNo", new TemplateData(queueBean.getQueueNo(), "#173177"));
-        mapdata.put("peopleNo", new TemplateData(queueBean.getPeopleNo(), "#173177"));
-        mapdata.put("modality", new TemplateData(queueBean.getModality(), "#173177"));
-        mapdata.put("number", new TemplateData(queueBean.getNumber().toString(), "#173177"));
-        mapdata.put("time", new TemplateData(queueBean.getTime().toString(), "#173177"));
+        mapdata.put("peopleNo", new TemplateData(queueBean.getCallId(), "#173177"));
+        mapdata.put("modality", new TemplateData(queueBean.getScheduledModality(), "#173177"));
+        mapdata.put("number", new TemplateData(queueBean.getBeforeNum().toString(), "#173177"));
+        mapdata.put("checkDate", new TemplateData(queueBean.getScheduledDate(), "#173177"));
+        mapdata.put("checkDep", new TemplateData(queueBean.getCallRoom(), "#173177"));
         wechatTemplate.setData(mapdata);
         wechatTemplate.setTemplate_id(startTemplateId);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(GzUrl.getSendMsgUrl.getUrl() +
@@ -213,9 +216,44 @@ public class QueueServiceImpl implements QueueService {
         JSONObject jsonObject = JSONObject.parseObject(responseEntity.getBody());
         String errcode = "errcode";
         if (jsonObject.getInteger(errcode) == 0) {
-            return new Result(true,"模板发送成功",null);
-        }else {
-            return new Result(false,"消息发送失败",msg);
+            return new Result(true, "模板发送成功", null);
+        } else {
+            return new Result(false, "消息发送失败", msg);
+        }
+    }
+
+    /**
+     * 一键签到
+     *
+     * @param openId openId
+     * @return result
+     */
+    @Override
+    public Result checkSignIn(String openId) {
+        List<QueueUserInfo> infos = queueUserInfoMapper.selectInfoByOpenId(openId);
+        return null;
+    }
+
+    @Override
+    public Result sendTemplateByOpenId(String openId) {
+        List<QueueUserInfo> list = queueUserInfoMapper.selectInfoByOpenId(openId);
+        if (list.size()==0){
+            return new Result(false,"查询失败");
+        }
+        //根据openId前置机回复模板消息（回复【1】）
+        castToSendTemplate(list);
+        return new Result(true,"发送成功");
+    }
+
+    public void castToSendTemplate(List<QueueUserInfo> list) {
+        for (int i = 0; i < list.size(); i++) {
+            QueueUserInfo queueUserInfo1 = list.get(i);
+            QueueBean queueBean = new QueueBean();
+            //类型设置为1，则代表自动推送模板消息
+            queueBean.setAccessionNo(queueUserInfo1.getAccessNo());
+            queueBean.setHospitalCode(queueUserInfo1.getHospitalCode());
+            queueBean.setType(1);
+            getQueueInfo(queueBean);
         }
     }
 }

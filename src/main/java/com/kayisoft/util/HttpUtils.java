@@ -2,6 +2,7 @@ package com.kayisoft.util;
 
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.log4j.Log4j2;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -11,6 +12,7 @@ import java.net.URL;
  * @Author tianqiu.lan
  * @Date 2019/9/2
  */
+@Log4j2
 public class HttpUtils {
     /**
      * 发送https请求
@@ -83,7 +85,7 @@ public class HttpUtils {
      * @param fileType 图片类型
      * @return filePath 图片路径
      */
-    public static String httpsRequestPicture(String requestUrl, String requestMethod, String data, String savePath,String folderName, String fileName, String fileType) {
+    public static String httpsRequestPicture(String requestUrl, String requestMethod, String data, String savePath,String folderName, String fileName, String fileType) throws Exception {
         InputStream inputStream = null;
         try {
             URL url = new URL(requestUrl);
@@ -110,7 +112,8 @@ public class HttpUtils {
             conn.disconnect();
             return filePath;
         } catch (Exception e) {
-            System.out.println("发送https请求失败，失败"+e);
+            log.info(e);
+            throw new Exception(e);
         }finally {
             //释放资源
             try {
@@ -118,9 +121,8 @@ public class HttpUtils {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                System.out.println("释放资源失败，失败"+e);
+                log.info(e);
             }
         }
-        return null;
     }
 }

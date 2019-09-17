@@ -13,7 +13,7 @@ public interface CreateCodeService {
      * @param queueUserInfo bean
      * @return result
      */
-    String createCode(QueueUserInfo queueUserInfo);
+    String createCode(QueueUserInfo queueUserInfo) throws Exception;
 
     /**
      * 获取二维码过期时间设置

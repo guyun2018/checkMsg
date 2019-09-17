@@ -85,9 +85,13 @@ public class GzController {
             switch (msgType) {
                 case "subscribe":
                     System.out.println("关注");
+                    //扫描带参关注（非搜索关注）
                     if (!"".equals(uuid)) {
                         //获取和openid，存入表进行关联
                         queueService.addOpenId(uuid.substring(8), toUser);
+                        content = "实时查询，请回复数字【1】";
+                        writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                        break;
                     }
                     content = "欢迎关注卡易智慧的测试公众号!";
                     //把数据包返回给微信服务器，微信服务器再推给用户
@@ -98,52 +102,35 @@ public class GzController {
                     //获取和openid，存入表进行关联
                     queueService.deleteOpenId(toUser);
                     break;
-                //扫码
+                //扫码查看
                 case "scancode_push":
                     break;
-                //查看报告
+                //我的检查
                 case "CLICK":
-                    Result result = queueService.sendMsg(toUser);
-                    if (!result.isSuccess()){
-                        content = "未查询到您的检查信息";
-                        writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                    if ("KY_CHECK_MY".equals(uuid)) {
+                        Result result = queueService.sendMsg(toUser);
+                        if (!result.isSuccess()){
+                            content = "未查询到您的检查信息";
+                            writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                        }
+                    }
+                    if ("KY_CHECK_SIGN_IN".equals(uuid)){
+
                     }
                     break;
                 default:
                     break;
             }
-//            if (map.get("Event").equals("subscribe")) {
-//                System.out.println("关注");
-//                if (!"".equals(uuid)) {
-//                    //获取和openid，存入表进行关联
-//                    queueService.addOpenId(uuid.substring(8), toUser);
-//                }
-//                content = "欢迎关注卡易智慧的测试公众号!";
-//                //把数据包返回给微信服务器，微信服务器再推给用户
-//                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
-//            }
-//            if (map.get("Event").equals("unsubscribe")) {
-//                System.out.println("取消关注");
-//                //获取和openid，存入表进行关联
-//                queueService.deleteOpenId(toUser);
-//            }
-//            if (map.get("Event").equals("scancode_push")) {
-//
-//
-////                content = "查询排队情况请回复【1】";
-//
-////                String encryptMsg = WXPublicUtils.encryptMsg(WXPayUtils.mapToXml(returnMap), new Date().getTime()+"", WXPublicUtils.getRandomStr());
-////                return encryptMsg;
-////                writer.print(MessageUtil.setMessage(fromUser, toUser, content));
-////                writer.close();
-//
-//            }
         } else if (map.get("MsgType").equals("text")) {
-            //如果是普通文本消息，先拿到用户发送过来的内容，模拟自动答疑的场景
-            String text = map.get("Content");
 
+            String text = map.get("Content");
+            //回复1实时查询
             if (text.equals("1")) {
-//                Result result = queueService.sendMsg(toUser);
+                Result result = queueService.sendTemplateByOpenId(toUser);
+                if (!result.isSuccess()){
+                    content="未查询到相关检查信息";
+                    writer.print(MessageUtil.setMessage(fromUser, toUser, content));
+                }
             } else if (text.equals("2")) {
                 content = "";
                 //把数据包返回给微信服务器，微信服务器再推给用户

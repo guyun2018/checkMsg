@@ -13,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,11 +40,15 @@ public class CreateCodeController {
      * @param queueUserInfo queueUserInfo
      * @return 二维码地址
      */
-    @RequestMapping(value = "/createCode")
+    @RequestMapping(value = "/createCode",method = RequestMethod.POST)
     @ResponseBody
-    public String getWXPublicQRCode(@RequestBody QueueUserInfo queueUserInfo) {
-        String code = createCodeService.createCode(queueUserInfo);
-        return code;
+    public Result getWXPublicQRCode(@RequestBody QueueUserInfo queueUserInfo) {
+        try {
+            String code = createCodeService.createCode(queueUserInfo);
+            return new Result(true,"二维码生成成功",code);
+        } catch (Exception e) {
+            return new Result(false,"二维码生成失败");
+        }
     }
 
 }

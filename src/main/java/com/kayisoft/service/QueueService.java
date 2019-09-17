@@ -16,7 +16,7 @@ public interface QueueService {
      * @param queueBean bean
      * @return result
      */
-    List<QueueBean> getQueueInfo(QueueBean queueBean);
+    QueueBean getQueueInfo(QueueBean queueBean);
 
 
     /**
@@ -52,4 +52,13 @@ public interface QueueService {
      * @return result
      */
     Result sendTemplateMsg(QueueBean queueBean);
+
+    /**
+     * 一键签到
+     * @param openId openId
+     * @return result
+     */
+    Result checkSignIn(String openId);
+
+    Result sendTemplateByOpenId(String openId);
 }

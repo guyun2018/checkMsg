@@ -31,10 +31,11 @@ public class QueueController {
         String accessNo = request.getParameter("accessNo");
         String hospitalCode = request.getParameter("hospitalCode");
         QueueBean queueBean = new QueueBean();
-        queueBean.setAccessNo(accessNo);
+        queueBean.setAccessionNo(accessNo);
         queueBean.setHospitalCode(hospitalCode);
-        List<QueueBean> list = queueService.getQueueInfo(queueBean);
-        request.setAttribute("queueList",list);
+        queueBean.setType(0);
+        QueueBean queueBean1 = queueService.getQueueInfo(queueBean);
+        request.setAttribute("queueList",queueBean1);
         request.setAttribute("accessNo",accessNo);
         request.setAttribute("hospitalCode",hospitalCode);
         return "queue";
@@ -62,9 +63,19 @@ public class QueueController {
         return queueService.getOpenId(queueUserInfo);
     }
 
+    /**
+     * 发送模板消息（定时）
+     * @param queueBean bean
+     * @return result
+     */
     @RequestMapping(value = "/sendTemplateMsg",method = RequestMethod.POST)
     @ResponseBody
     public Result sendTemplateMsg(@RequestBody QueueBean queueBean){
         return queueService.sendTemplateMsg(queueBean);
+    }
+    @RequestMapping(value = "/checkSignIn")
+    @ResponseBody
+    public Result checkSignIn(){
+        return null;
     }
 }

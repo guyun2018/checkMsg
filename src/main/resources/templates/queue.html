@@ -18,17 +18,16 @@
     <div class="swiper-wrapper">
         <div class="swiper-slide swiper-slide-active" th:each="info:${queueList}">
             <div class="queueInfo" th:if="${info.isStart ==1}">
-                <div class="title" th:text="${info.name}"></div>
+                <div class="title" th:text="${info.patientName}"></div>
                 <div>当前号码：<span class="emphasize" th:text="${info.queueNo}"></span></div>
-                <div>我的号码：<span class="emphasize" th:text="${info.peopleNo}"></span></div>
-                <div>检查项目：<span class="emphasize" th:text="${info.modality}"></span></div>
-                <div>您前面还有<span class="emphasize" th:text="${info.number}">3</span>位在等候 预计等待时间<span class="emphasize"
-                                                                                                    th:text="${info.time}"></span>分钟
+                <div>我的号码：<span class="emphasize" th:text="${info.callId}"></span></div>
+                <div>检查项目：<span class="emphasize" th:text="${info.scheduledModality}"></span></div>
+                <div>检查时间：<span class="emphasize" th:text="${info.scheduledDate}"></span></div>
+                <div>您前面还有<span class="emphasize" th:text="${info.beforeNum}">3</span>位在等候 请提早到<span class="emphasize"
+                                                                                                      th:text="${info.callRoom}"></span>检查
                 </div>
-                <div>请合理安排时间，提早前往<span class="emphasize"
-                             th:text="${info.checkDep}"></span>做检查
-                </div>
-                <div>备注：如需查看其他医院的检查信息，请关注下方公众号</div>
+
+                <div>备注：签到、查报告，体验更多功能，请关注下方公众号</div>
             </div>
             <div class="queueInfo" th:if="${info.isStart ==0}">
                 <div class="title" th:text="${info.name}"></div>
@@ -144,9 +143,13 @@
                 contentType: "application/json;charset=utf-8",
                 success: function (e) {
                     layer.closeAll();
-                    resolve(e)
+                    if (e.success) {
+                        resolve(e.obj)
+                    } else {
+                        layer.msg(e.msg)
+                    }
                 },
-                fail: function (e) {
+                error: function (e) {
                     reject(e)
                 }
             })
