@@ -81,6 +81,7 @@ public class CreateCodeServiceImpl implements CreateCodeService {
             QueueUserInfo queueUserInfo1 = new QueueUserInfo();
             queueUserInfo1.setId(uuid);
             queueUserInfo1.setHospitalCode(queueUserInfo.getHospitalCode());
+            queueUserInfo1.setPatientId(queueUserInfo.getPatientId());
             queueUserInfo1.setAccessNo(queueUserInfo.getAccessNo());
             queueUserInfo1.setOpenId(null);
             queueUserInfoMapper.insert(queueUserInfo1);

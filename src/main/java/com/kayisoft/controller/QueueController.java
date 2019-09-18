@@ -28,16 +28,17 @@ public class QueueController {
      */
     @RequestMapping(value = "/checkQueue",method = RequestMethod.GET)
     public String checkQueue(HttpServletRequest request){
+        String patientId = request.getParameter("patientId");
         String accessNo = request.getParameter("accessNo");
         String hospitalCode = request.getParameter("hospitalCode");
         QueueBean queueBean = new QueueBean();
+        queueBean.setPatientId(patientId);
         queueBean.setAccessionNo(accessNo);
         queueBean.setHospitalCode(hospitalCode);
         queueBean.setType(0);
         QueueBean queueBean1 = queueService.getQueueInfo(queueBean);
-        request.setAttribute("queueList",queueBean1);
-        request.setAttribute("accessNo",accessNo);
-        request.setAttribute("hospitalCode",hospitalCode);
+        queueBean1.setPatientId(patientId);
+        request.setAttribute("info",queueBean1);
         return "queue";
     }
 
@@ -64,7 +65,7 @@ public class QueueController {
     }
 
     /**
-     * 发送模板消息（定时）
+     * 发送模板消息（定时）需要patientId
      * @param queueBean bean
      * @return result
      */
@@ -73,9 +74,15 @@ public class QueueController {
     public Result sendTemplateMsg(@RequestBody QueueBean queueBean){
         return queueService.sendTemplateMsg(queueBean);
     }
+
+    /**
+     * 一键签到
+     * @return
+     */
     @RequestMapping(value = "/checkSignIn")
     @ResponseBody
-    public Result checkSignIn(){
+    public Result checkSignIn(@RequestBody QueueBean queueBean){
+        Result result = queueService.checkSignIn(queueBean);
         return null;
     }
 }

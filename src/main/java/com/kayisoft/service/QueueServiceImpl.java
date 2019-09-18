@@ -3,19 +3,23 @@ package com.kayisoft.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.kayisoft.mapper.QueueUserInfoMapper;
-import com.kayisoft.model.QueueBean;
-import com.kayisoft.model.QueueUserInfo;
-import com.kayisoft.model.TemplateData;
-import com.kayisoft.model.WechatTemplate;
+import com.kayisoft.mapper.WxHospitalUrlMapper;
+import com.kayisoft.model.*;
 import com.kayisoft.util.DateUtil;
 import com.kayisoft.util.GzUrl;
 import com.kayisoft.util.PropertiesUtil;
+import com.kayisoft.util.UserManageUrl;
 import com.kayisoft.vo.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -48,6 +52,9 @@ public class QueueServiceImpl implements QueueService {
     @Value("${not_start_template_id}")
     private String notStartTemplateId;
 
+    @Autowired
+    WxHospitalUrlMapper wxHospitalUrlMapper;
+
     /**
      * 获取检查相关信息（前置机获取信息）
      *
@@ -56,28 +63,45 @@ public class QueueServiceImpl implements QueueService {
      */
     @Override
     public QueueBean getQueueInfo(QueueBean queueBean) {
-        Map<String, Object> map = PropertiesUtil.getProfileByClassLoader("hospitalUrl.properties");
-        String serverUrl = map.get(queueBean.getHospitalCode()).toString();
-        //获取检查排队信息List(包括姓名、检查号、检查时间、前面几人、排队名次？)
-//        String forObject = restTemplate.getForObject("XXXX?accessNo=abcde", String.class);
-//        JSONObject ojb = JSONObject.parseObject(forObject);
-//        QueueBean queueBean = JSON.toJavaObject(ojb, QueueBean.class);
-        QueueBean queueBean1 = new QueueBean();
-        queueBean1.setHospitalCode("47068179533038211A1001");
-        queueBean1.setAccessionNo("abcde110");
-        queueBean1.setQueueNo("A05");
-        queueBean1.setCallId("A10");
-        queueBean1.setBeforeNum(5);
-        queueBean1.setPatientName("周宇婷");
-        queueBean1.setCallRoom("五楼彩超1室");
-        queueBean1.setScheduledModality("USMF");
-        queueBean1.setScheduledDate("2019-09-17 16:00:36");
-        queueBean1.setIsStart(1);
-        //模拟type为1时消息模板自动回复
-        if (queueBean.getType() == 1) {
-            Result result = sendTemplateMsg(queueBean1);
+//        Map<String, Object> map = PropertiesUtil.getProfileByClassLoader("hospitalUrl.properties");
+//        String serverUrl = map.get(queueBean.getHospitalCode()).toString();
+        UrlBean urlBean = wxHospitalUrlMapper.selectByHospitalCode(queueBean.getHospitalCode());
+        String url = "http://" + urlBean.getHospitalUrl() + ":10003/api/addList";
+        Map map = new HashMap();
+        map.put("accessionNo", queueBean.getAccessionNo());
+        map.put("hospitalCode", queueBean.getHospitalCode());
+        map.put("type", "0");
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map> requestEntity = new HttpEntity<>(map, header);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestEntity, String.class);
+        String body = responseEntity.getBody();
+        JSONObject jsonObject = JSONObject.parseObject(body);
+        if (jsonObject.getBoolean("success")) {
+            QueueBean bean = JSON.toJavaObject(jsonObject.getJSONObject("obj"), QueueBean.class);
+            bean.setScheduledDate(DateUtil.timeStamp2Date(bean.getScheduledDate(), "yyyy-MM-dd HH:mm"));
+//        QueueBean queueBean1 = new QueueBean();
+//        queueBean1.setHospitalCode("47068179533038211A1001");
+//        queueBean1.setAccessionNo("abcde110");
+//        queueBean1.setQueueNo("A05");
+//        queueBean1.setCallId("A10");
+//        queueBean1.setBeforeNum(5);
+//        queueBean1.setPatientName("周宇婷");
+//        queueBean1.setCallRoom("五楼彩超1室");
+//        queueBean1.setScheduledModality("USMF");
+//        queueBean1.setScheduledDate("2019-09-17 16:00:36");
+//        queueBean1.setIsStart(1);
+//        queueBean1.setCheckStatus("签到");
+//        queueBean1.setPatientId("125200");
+            //模拟type为1时消息模板自动回复
+            if (queueBean.getType() == 1) {
+                Result result = sendTemplateMsg(bean);
+            }
+            return bean;
+        }else {
+            queueBean.setMsg(jsonObject.getString("msg"));
+            return queueBean;
         }
-        return queueBean1;
     }
 
 
@@ -191,7 +215,8 @@ public class QueueServiceImpl implements QueueService {
     @Override
     public Result sendTemplateMsg(QueueBean queueBean) {
         QueueUserInfo queueUserInfo = new QueueUserInfo();
-        queueUserInfo.setAccessNo(queueBean.getAccessionNo());
+        //通过patiendId查询openId
+        queueUserInfo.setPatientId(queueBean.getPatientId());
         queueUserInfo.setHospitalCode(queueBean.getHospitalCode());
         Result openIdInfo = getOpenId(queueUserInfo);
         if (!openIdInfo.isSuccess()) {
@@ -209,7 +234,11 @@ public class QueueServiceImpl implements QueueService {
         mapdata.put("checkDate", new TemplateData(queueBean.getScheduledDate(), "#173177"));
         mapdata.put("checkDep", new TemplateData(queueBean.getCallRoom(), "#173177"));
         wechatTemplate.setData(mapdata);
-        wechatTemplate.setTemplate_id(startTemplateId);
+        if ("已签到".equals(queueBean.getCheckStatus())) {
+            wechatTemplate.setTemplate_id(startTemplateId);
+        } else {
+            wechatTemplate.setTemplate_id(notStartTemplateId);
+        }
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(GzUrl.getSendMsgUrl.getUrl() +
                 accessTokenService.getAccToken("AccessTokenCache"), JSON.toJSONString(wechatTemplate), String.class);
         String msg = responseEntity.getBody();
@@ -225,24 +254,36 @@ public class QueueServiceImpl implements QueueService {
     /**
      * 一键签到
      *
-     * @param openId openId
+     * @param queueBean queueBean
      * @return result
      */
     @Override
-    public Result checkSignIn(String openId) {
-        List<QueueUserInfo> infos = queueUserInfoMapper.selectInfoByOpenId(openId);
-        return null;
+    public Result checkSignIn(QueueBean queueBean) {
+        //根据openId查询accessNo和hospitalCode
+        UrlBean urlBean = wxHospitalUrlMapper.selectByHospitalCode(queueBean.getHospitalCode());
+        String url = "http://" + urlBean.getHospitalUrl() + ":10003/api/check";
+        Map map = new HashMap();
+        map.put("accessionNo", queueBean.getAccessionNo());
+        map.put("hospitalCode", queueBean.getHospitalCode());
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map> requestEntity = new HttpEntity<>(map, header);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestEntity, String.class);
+        String body = responseEntity.getBody();
+        JSONObject jsonObject = JSONObject.parseObject(body);
+        Result result = JSON.toJavaObject(jsonObject, Result.class);
+        return result;
     }
 
     @Override
     public Result sendTemplateByOpenId(String openId) {
         List<QueueUserInfo> list = queueUserInfoMapper.selectInfoByOpenId(openId);
-        if (list.size()==0){
-            return new Result(false,"查询失败");
+        if (list.size() == 0) {
+            return new Result(false, "查询失败");
         }
         //根据openId前置机回复模板消息（回复【1】）
         castToSendTemplate(list);
-        return new Result(true,"发送成功");
+        return new Result(true, "发送成功");
     }
 
     public void castToSendTemplate(List<QueueUserInfo> list) {

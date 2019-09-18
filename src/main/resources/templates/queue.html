@@ -12,60 +12,57 @@
 </head>
 
 <body>
-<p th:text="${accessNo}" id="accessNo" style="display: none"></p>
-<p th:text="${hospitalCode}" id="hospitalCode" style="display: none"></p>
+<p th:text="${info.msg}" id="msg" style="display: none"></p>
+<p th:text="${info.patientId}" id="patientId" style="display: none"></p>
+<p th:text="${info.hospitalCode}" id="hospitalCode" style="display: none"></p>
+<p th:text="${info.accessionNo}" id="accessNo" style="display: none"></p>
 <div class="swiper-container swiper-container-horizontal">
     <div class="swiper-wrapper">
-        <div class="swiper-slide swiper-slide-active" th:each="info:${queueList}">
-            <div class="queueInfo" th:if="${info.isStart ==1}">
+        <div class="swiper-slide swiper-slide-active">
+            <div class="queueInfo" th:if="${info.checkStatus =='签到'}">
                 <div class="title" th:text="${info.patientName}"></div>
                 <div>当前号码：<span class="emphasize" th:text="${info.queueNo}"></span></div>
                 <div>我的号码：<span class="emphasize" th:text="${info.callId}"></span></div>
                 <div>检查项目：<span class="emphasize" th:text="${info.scheduledModality}"></span></div>
-                <div>检查时间：<span class="emphasize" th:text="${info.scheduledDate}"></span></div>
+                <div>检查时间：<span class="emphasize" th:text="${info.scheduledDate}"></span>
+                    <span class="emphasize" th:text="${info.medcine}"></span></div>
                 <div>您前面还有<span class="emphasize" th:text="${info.beforeNum}">3</span>位在等候 请提早到<span class="emphasize"
-                                                                                                      th:text="${info.callRoom}"></span>检查
+                                                                                                     th:text="${info.callRoom}"></span>检查
                 </div>
 
                 <div>备注：签到、查报告，体验更多功能，请关注下方公众号</div>
             </div>
-            <div class="queueInfo" th:if="${info.isStart ==0}">
-                <div class="title" th:text="${info.name}"></div>
-                <div>检查日期：<span class="emphasize" th:text="${info.checkDate}"></span></div>
-                <div>检查项目：<span class="emphasize" th:text="${info.modality}"></span></div>
-                <div>当前日期：<span class="emphasize" th:text="${info.today}"></span></div>
-                <div>请在<span class="emphasize" th:text="${info.time}"></span>天后到<span class="emphasize"
-                                                                                      th:text="${info.hospitalName}"></span>检查
-                </div>
-                <div>备注：该项检查时间还早，关注下方公众号届时检查可一键签到</div>
+            <div class="queueInfo" th:if="${info.checkStatus !='签到'}">
+                <div class="title" th:text="${info.patientName}"></div>
+                <!--<div>当前号码：<span class="emphasize" th:text="${info.queueNo}"></span></div>-->
+                <div>我的号码：<span class="emphasize" th:text="${info.callId}"></span></div>
+                <div>检查项目：<span class="emphasize" th:text="${info.scheduledModality}"></span></div>
+                <div>检查时间：<span class="emphasize" th:text="${info.scheduledDate}"></span>
+                    <span class="emphasize" th:text="${info.medcine}"></span></div>
+                <div>您还未签到，请点击下方签到按钮</div>
+
             </div>
+            <!--<div class="queueInfo" th:if="${info.isStart ==0}">-->
+            <!--<div class="title" th:text="${info.name}"></div>-->
+            <!--<div>检查日期：<span class="emphasize" th:text="${info.checkDate}"></span></div>-->
+            <!--<div>检查项目：<span class="emphasize" th:text="${info.modality}"></span></div>-->
+            <!--<div>当前日期：<span class="emphasize" th:text="${info.today}"></span></div>-->
+            <!--<div>请在<span class="emphasize" th:text="${info.time}"></span>天后到<span class="emphasize"-->
+            <!--th:text="${info.hospitalName}"></span>检查-->
+            <!--</div>-->
+            <!--<div>备注：该项检查时间还早，关注下方公众号届时检查可一键签到</div>-->
+            <!--</div>-->
         </div>
     </div>
-    <!--<div class="swiper-slide swiper-slide-next">-->
-    <!--<div class="queueInfo">-->
-    <!--<div class="title">李桂香</div>-->
-    <!--<div>当前号码：<span class="emphasize">A031</span></div>-->
-    <!--<div>我的号码：<span class="emphasize">A034</span></div>-->
-    <!--<div>检查项目：<span class="emphasize">CT</span></div>-->
-    <!--<div>您前面还有<span class="emphasize">3</span>位在等候 预计等待时间<span class="emphasize">33</span>分钟</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="swiper-slide">-->
-    <!--<div class="queueInfo">-->
-    <!--<div class="title">李桂香</div>-->
-    <!--<div>检查日期：<span class="emphasize">2019-10-1</span></div>-->
-    <!--<div>检查项目：<span class="emphasize">超声</span></div>-->
-    <!--<div>当前日期：<span class="emphasize">2019-9-28</span></div>-->
-    <!--<div>请在<span class="emphasize">3</span>天后到温州人民医院<span class="emphasize">超声科</span>检查</div>-->
-    <!--<div>您的该项检查时间还早，可关注公众号届时检查一键签到</div>-->
-    <!--</div>-->
-    <!--</div>-->
 </div>
 <div class="swiper-pagination swiper-pagination-clickable" id="pagination">
 </div>
 </div>
-<button class="refreshBtn">
+<button class="refreshBtn" th:if="${info.checkStatus =='签到'}">
     刷新
+</button>
+<button class="signIn" th:if="${info.checkStatus !='签到'}">
+    一键签到
 </button>
 <div class="qrContain">
     <img id="qrImg" class="qrImg" src="" alt=""/>
@@ -80,10 +77,16 @@
 <script th:src="@{/static/jquery/jquery-3.2.1.min.js}" charset="utf-8"></script>
 <script th:src="@{/static/layer/layer.js}" charset="utf-8"></script>
 <script>
-    var access = $("#accessNo").text();
+    var patientId = $("#patientId").text();
     var hospitalCode = $("#hospitalCode").text();
+    var accessNo = $("#accessNo").text();
     $(document).ready(function () {
         document.getElementById("qrImg").style.display = 'none';
+        var msg = $("#msg").text();
+        if (msg){
+            layer.alert(msg+"，请到护士台重新刷卡")
+            $(".signIn").attr("disabled",true)
+        }
         document.getElementById('loadQR').addEventListener("click", () => {
             // document.getElementById('loadQR').style.opacity = '0';
             gz().then(e => {
@@ -113,12 +116,31 @@
         window.location.reload();
         // window.location.href="/checkQueue?accessNo="+access+"&hospitalCode="+hospitalCode;
     })
+    $(".signIn").click(function (e) {
+        $.ajax({
+            url: '/api/checkSignIn',
+            data: JSON.stringify({accessionNo: accessNo, hospitalCode: hospitalCode}),
+            method: 'POST',
+            contentType: "application/json;charset=utf-8",
+            success: function (e) {
+                if (e.success){
+                    layer.msg("签到成功！")
+                    setTimeout(function (e) {
+                        window.location.reload();
+                    },1500)
+                }else {
+                    layer.alert("签到失败！请到护士台刷卡签到")
+                    layer.closeAll();
+                }
+            }
+        })
+    })
 
     function gz() {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: '/api/getOpenId',
-                data: JSON.stringify({accessNo: access, hospitalCode}),
+                data: JSON.stringify({patientId: patientId, hospitalCode: hospitalCode}),
                 method: 'POST',
                 contentType: "application/json;charset=utf-8",
                 success: function (e) {
@@ -138,7 +160,7 @@
             //生成二维码
             $.ajax({
                 url: '/createCode',
-                data: JSON.stringify({accessNo: access, hospitalCode}),
+                data: JSON.stringify({patientId: patientId, hospitalCode,accessNo: accessNo}),
                 method: 'POST',
                 contentType: "application/json;charset=utf-8",
                 success: function (e) {

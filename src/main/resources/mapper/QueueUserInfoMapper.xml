@@ -4,126 +4,134 @@
     <!--auto generated Code-->
     <resultMap id="BaseResultMap" type="com.kayisoft.model.QueueUserInfo">
         <result column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="access_no" property="accessNo" jdbcType="VARCHAR"/>
+        <result column="patient_id" property="patientId" jdbcType="VARCHAR"/>
         <result column="hospital_code" property="hospitalCode" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
         <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="access_no" property="accessNo" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--auto generated Code-->
     <sql id="Base_Column_List">
         id,
-        access_no,
+        patient_id,
         hospital_code,
         create_date,
         update_date,
-        open_id
-    </sql>
+        open_id,
+access_no
+</sql>
 
     <!--auto generated Code-->
     <insert id="insert">
-        INSERT INTO queue_user_info (
+        INSERT INTO queue_user_info(
             id,
-            access_no,
+            patient_id,
             hospital_code,
             create_date,
             update_date,
-            open_id
+            open_id,
+            access_no
         ) VALUES (
             #{queueUserInfo.id,jdbcType=VARCHAR},
-            #{queueUserInfo.accessNo,jdbcType=VARCHAR},
+            #{queueUserInfo.patientId,jdbcType=VARCHAR},
             #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},
-            sysdate,
+            #{queueUserInfo.createDate,jdbcType=TIMESTAMP},
             #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},
-            #{queueUserInfo.openId,jdbcType=VARCHAR}
+            #{queueUserInfo.openId,jdbcType=VARCHAR},
+            #{queueUserInfo.accessNo,jdbcType=VARCHAR}
         )
-    </insert>
+</insert>
 
     <!--auto generated Code-->
     <insert id="insertSelective">
         INSERT INTO queue_user_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="queueUserInfo.id!=null"> id,</if>
-            <if test="queueUserInfo.accessNo!=null"> access_no,</if>
+            <if test="queueUserInfo.patientId!=null"> patient_id,</if>
             <if test="queueUserInfo.hospitalCode!=null"> hospital_code,</if>
-            <if test="queueUserInfo.createDate!=null">createDate,</if>
+            <if test="queueUserInfo.createDate!=null"> create_date,</if>
             <if test="queueUserInfo.updateDate!=null"> update_date,</if>
             <if test="queueUserInfo.openId!=null"> open_id,</if>
+            <if test="queueUserInfo.accessNo!=null"> access_no</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="queueUserInfo.id!=null">#{queueUserInfo.id,jdbcType=VARCHAR},
-            </if>
-            <if test="queueUserInfo.accessNo!=null">#{queueUserInfo.accessNo,jdbcType=VARCHAR},
-            </if>
-            <if test="queueUserInfo.hospitalCode!=null">#{queueUserInfo.hospitalCode,jdbcType=VARCHAR},
-            </if>
-            <if test="queueUserInfo.createDate!=null">#{queueUserInfo.createDate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="queueUserInfo.updateDate!=null">#{queueUserInfo.updateDate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="queueUserInfo.openId!=null">#{queueUserInfo.openId,jdbcType=VARCHAR},
-            </if>
+            <if test="queueUserInfo.id!=null"> #{queueUserInfo.id,jdbcType=VARCHAR},</if>
+            <if test="queueUserInfo.patientId!=null"> #{queueUserInfo.patientId,jdbcType=VARCHAR},</if>
+            <if test="queueUserInfo.hospitalCode!=null"> #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},</if>
+            <if test="queueUserInfo.createDate!=null"> #{queueUserInfo.createDate,jdbcType=TIMESTAMP},</if>
+            <if test="queueUserInfo.updateDate!=null"> #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},</if>
+            <if test="queueUserInfo.openId!=null"> #{queueUserInfo.openId,jdbcType=VARCHAR},</if>
+            <if test="queueUserInfo.accessNo!=null"> #{queueUserInfo.accessNo,jdbcType=VARCHAR}</if>
         </trim>
-    </insert>
+</insert>
 
     <!--auto generated Code-->
     <insert id="insertList">
-        INSERT INTO queue_user_info (
+        INSERT INTO queue_user_info(
             id,
-            access_no,
+            patient_id,
             hospital_code,
             create_date,
             update_date,
-            open_id
+            open_id,
+            access_no
         )VALUES
         <foreach collection="queueUserInfos" item="queueUserInfo" index="index" separator=",">
-            (
+        (
             #{queueUserInfo.id,jdbcType=VARCHAR},
-            #{queueUserInfo.accessNo,jdbcType=VARCHAR},
+            #{queueUserInfo.patientId,jdbcType=VARCHAR},
             #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},
             #{queueUserInfo.createDate,jdbcType=TIMESTAMP},
             #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},
-            #{queueUserInfo.openId,jdbcType=VARCHAR}
-            )
+            #{queueUserInfo.openId,jdbcType=VARCHAR},
+            #{queueUserInfo.accessNo,jdbcType=VARCHAR}
+        )
         </foreach>
-    </insert>
+</insert>
 
     <!--auto generated Code-->
     <update id="updateByPrimaryKeySelective">
         UPDATE queue_user_info
         <set>
-            <if test="queueUserInfo.accessNo != null"> access_no= #{queueUserInfo.accessNo,jdbcType=VARCHAR},</if>
-            <if test="queueUserInfo.hospitalCode != null"> hospital_code= #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},</if>
-            <if test="queueUserInfo.createDate != null"> create_date= #{queueUserInfo.createDate,jdbcType=TIMESTAMP},</if>
-            <if test="queueUserInfo.updateDate != null"> update_date= #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},</if>
-            <if test="queueUserInfo.openId != null"> open_id= #{queueUserInfo.openId,jdbcType=VARCHAR}</if>
+                <if test="queueUserInfo.id != null"> id = #{queueUserInfo.id,jdbcType=VARCHAR},</if>
+                <if test="queueUserInfo.patientId != null"> patient_id = #{queueUserInfo.patientId,jdbcType=VARCHAR},</if>
+                <if test="queueUserInfo.hospitalCode != null"> hospital_code = #{queueUserInfo.hospitalCode,jdbcType=VARCHAR},</if>
+                <if test="queueUserInfo.createDate != null"> create_date = #{queueUserInfo.createDate,jdbcType=TIMESTAMP},</if>
+                <if test="queueUserInfo.updateDate != null"> update_date = #{queueUserInfo.updateDate,jdbcType=TIMESTAMP},</if>
+                <if test="queueUserInfo.openId != null"> open_id = #{queueUserInfo.openId,jdbcType=VARCHAR},</if>
+                <if test="queueUserInfo.accessNo != null"> access_no = #{queueUserInfo.accessNo,jdbcType=VARCHAR}</if>
         </set>
-        WHERE id = #{queueUserInfo.id,jdbcType=VARCHAR}
+		WHERE id = #{queueUserInfo.id,jdbcType=VARCHAR}
     </update>
     <select id="selectOpenId" resultMap="BaseResultMap">
       SELECT OPEN_ID
       FROM QUEUE_USER_INFO
-      WHERE  ACCESS_NO = #{accessNo,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
+      WHERE  PATIENT_ID = #{patientId,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
     </select>
+
     <select id="selectHospitalCode" resultMap="BaseResultMap">
       SELECT <include refid="Base_Column_List"/>
       FROM QUEUE_USER_INFO
-      WHERE  ACCESS_NO = #{accessNo,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
+      WHERE  PATIENT_ID = #{patientId,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
     </select>
+
     <delete id="deleteByOpenId">
       DELETE FROM QUEUE_USER_INFO WHERE OPEN_ID = #{openId,jdbcType=VARCHAR}
     </delete>
+
     <select id="selectInfoByOpenId" resultMap="BaseResultMap">
       SELECT
-        ACCESS_NO,HOSPITAL_CODE
+        <include refid="Base_Column_List"/>
       FROM QUEUE_USER_INFO
       WHERE OPEN_ID = #{openId,jdbcType=VARCHAR}
     </select>
+
     <select id="selectAccNoById" resultMap="BaseResultMap">
     SELECT
-      ACCESS_NO,HOSPITAL_CODE
+      PATIENT_ID,HOSPITAL_CODE,ACCESS_NO
     FROM QUEUE_USER_INFO
     WHERE ID = #{uuid,jdbcType=VARCHAR}
     </select>

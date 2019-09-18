@@ -13,6 +13,7 @@ import java.util.Date;
 @Getter
 public class QueueUserInfo {
     private String id;
+    private String patientId;
     private String accessNo;
     private String hospitalCode;
     private Date createDate;

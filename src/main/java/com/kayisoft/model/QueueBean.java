@@ -10,6 +10,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class QueueBean {
+
+    private String patientId;
+
     private String accessionNo;
 
     private String hospitalCode;
@@ -19,6 +22,8 @@ public class QueueBean {
     private String patientName;
 
     private String queueNo;
+
+    private String checkStatus;
 
     private String callId;
 
@@ -41,6 +46,8 @@ public class QueueBean {
     private String callRoom;
 
     private Integer type;
+
+    private String msg;
 
     public QueueBean() {
     }

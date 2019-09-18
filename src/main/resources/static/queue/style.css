@@ -1,272 +1,280 @@
 ﻿@charset "utf-8";
 
 :root {
-	--textSize     : 16px;
-	--titleSize    : 24px;
-	--emphasizeSize: 22px;
-	--bottomSize   : 20px;
+    --textSize: 16px;
+    --titleSize: 24px;
+    --emphasizeSize: 22px;
+    --bottomSize: 20px;
 }
 
 * {
-	margin : 0;
-	padding: 0
+    margin: 0;
+    padding: 0
 }
 
 html {
-	height: 100%
+    height: 100%
 }
 
 body {
-	word-wrap: break-word;
-	font     : var(--textSize)/1.5 Helvetica, Arial;
-	/* 这里是设置字体，Helvetica字体在移动端各系统都支持（都不支持微软雅黑） */
-	color                   : #333;
-	-webkit-text-size-adjust: none;
-	/* 设置文本不会放大，普通网页在移动端打开文本是会跟随网页结构缩放的 */
-	background-color   : #77af9c;
-	flex-direction     : column;
-	display            : flex;
-	align-items        : center;
-	justify-content    : flex-start;
-	box-sizing         : border-box;
-	/* min-height      : 100vh;
-	max-height         : 100vh; */
+    word-wrap: break-word;
+    font: var(--textSize)/1.5 Helvetica, Arial;
+    /* 这里是设置字体，Helvetica字体在移动端各系统都支持（都不支持微软雅黑） */
+    color: #333;
+    -webkit-text-size-adjust: none;
+    /* 设置文本不会放大，普通网页在移动端打开文本是会跟随网页结构缩放的 */
+    background-color: #77af9c;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    /* min-height      : 100vh;
+    max-height         : 100vh; */
 }
 
 body * {
-	-webkit-tap-highlight-color: transparent;
-	/* //在一些手机上，如iphone，点击按钮等元素会出现点击态的背景色，设置为透明就看不出来了 */
-	-webkit-user-select: none;
-	/* //设置元素内的文字及其子元素将不会被选中 */
+    -webkit-tap-highlight-color: transparent;
+    /* //在一些手机上，如iphone，点击按钮等元素会出现点击态的背景色，设置为透明就看不出来了 */
+    -webkit-user-select: none;
+    /* //设置元素内的文字及其子元素将不会被选中 */
 }
 
 #header img {
-	width: 100%
+    width: 100%
 }
 
 .swiper-container {
-	width              : 100%;
-	-webkit-perspective: 1200px;
-	-moz-perspective   : 1200px;
-	-ms-perspective    : 1200px;
-	perspective        : 1200px
+    width: 100%;
+    -webkit-perspective: 1200px;
+    -moz-perspective: 1200px;
+    -ms-perspective: 1200px;
+    perspective: 1200px
 }
 
 .swiper-wrapper {
-	margin-top: 10px;
-	position  : relative;
+    margin-top: 10px;
+    position: relative;
 }
 
 .swiper-slide {
-	width                  : 80%;
-	-webkit-transform-style: preserve-3d;
-	-moz-transform-style   : preserve-3d;
-	-ms-transform-style    : preserve-3d;
-	transform-style        : preserve-3d
+    width: 80%;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d
 }
 
 .swiper-slide-active {
-	margin-top: 30px;
+    margin-top: 30px;
 }
 
 .swiper-slide .queueInfo {
-	width  : 90%;
-	margin : 0 auto;
-	display: block;
+    width: 90%;
+    margin: 0 auto;
+    display: block;
 }
 
 .title {
-	display        : flex;
-	align-items    : center;
-	justify-content: center;
-	color          : #285943;
-	font-size      : var(--titleSize);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #285943;
+    font-size: var(--titleSize);
 }
 
 .emphasize {
-	font-size: var(--emphasizeSize);
-	color    : #4fa880;
-	margin   : 0 3px;
+    font-size: var(--emphasizeSize);
+    color: #4fa880;
+    margin: 0 3px;
 }
 
 #pagination {
-	position: absolute;
-	width   : 100%;
-	top     : 10px;
-	z-index : 10;
+    position: absolute;
+    width: 100%;
+    top: 10px;
+    z-index: 10;
 }
 
 #pagination .swiper-pagination-bullet {
-	width     : 9.5%;
-	margin    : 0 0 0 6.15%;
-	background: 0;
-	opacity   : 1
+    width: 9.5%;
+    margin: 0 0 0 6.15%;
+    background: 0;
+    opacity: 1
 }
 
 .swiper-pagination-bullet i {
-	background   : #41203f;
-	width        : 24px;
-	height       : 24px;
-	line-height  : 24px;
-	font-size    : 12px;
-	border-radius: 50px;
-	display      : block;
-	font-style   : normal;
-	text-align   : center;
-	margin       : 0 auto;
-	color        : #f5b55c;
-	transform    : translateX(-50%) !important;
+    background: #41203f;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    border-radius: 50px;
+    display: block;
+    font-style: normal;
+    text-align: center;
+    margin: 0 auto;
+    color: #f5b55c;
+    transform: translateX(-50%) !important;
 }
 
 .swiper-pagination-bullet-active i {
-	-webkit-transform: scale(1.5);
-	background       : rgba(251, 186, 93, 1) !important;
-	color            : #815d4b
+    -webkit-transform: scale(1.5);
+    background: rgba(251, 186, 93, 1) !important;
+    color: #815d4b
 }
 
-
-
-
 .queueInfo {
-	width          : 100%;
-	display        : flex;
-	flex-direction : column;
-	align-items    : left;
-	justify-content: flex-start;
-	margin         : 5px auto;
-	background     : #d7fff1;
-	border-radius  : 20px;
-	padding        : 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: flex-start;
+    margin: 5px auto;
+    background: #d7fff1;
+    border-radius: 20px;
+    padding: 10px;
 }
 
 .queueInfo div {
-	margin: 10px 0;
+    margin: 10px 0;
 }
 
 .loadQR {
-	height       : 120px;
-	width        : 120px;
-	background   : #d7fff1;
-	color        : #285943;
-	line-height  : 40px;
-	border-radius: 10px;
-	font-size    : var(--bottomSize);
+    height: 120px;
+    width: 120px;
+    background: #d7fff1;
+    color: #285943;
+    line-height: 40px;
+    border-radius: 10px;
+    font-size: var(--bottomSize);
 }
 
 .qrText,
 .qrImg,
 .loadQR {
-	transition: all 3s;
-	text-align: center;
+    transition: all 3s;
+    text-align: center;
 }
 
 .qrContain {
-	display           : flex;
-	flex-direction    : column;
-	align-items       : center;
-	/* justify-content: center; */
-	flex              : 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    flex: 1;
 }
 
 .qrImg {
-	height: 120px;
-	width : 120px;
+    height: 120px;
+    width: 120px;
 }
 
 .qrText {
-	color          : white;
-	/* writing-mode: vertical-rl; */
+    color: white;
+    /* writing-mode: vertical-rl; */
 }
 
 .refreshBtn {
-	width        : 85%;
-	background   : #285943;
-	color        : #d7fff1;
-	line-height  : 40px;
-	border-radius: 10px;
-	margin-bottom: 10px;
-	margin-top   : 10px;
-	font-size    : var(--bottomSize);
+    width: 85%;
+    background: #285943;
+    color: #d7fff1;
+    line-height: 40px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: var(--bottomSize);
+}
+
+.signIn {
+    width: 85%;
+    background: #285943;
+    color: #d7fff1;
+    line-height: 40px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: var(--bottomSize);
 }
 
 .scheIcon {
-	width      : 20px;
-	height     : 20px;
-	margin-left: -20px;
+    width: 20px;
+    height: 20px;
+    margin-left: -20px;
 }
 
 .logo_div {
-	width     : 100%;
-	margin    : 0 auto;
-	color     : gray;
-	text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    color: gray;
+    text-align: center;
 }
 
 button {
-	margin          : 0;
-	padding         : 0;
-	outline         : none;
-	border          : 0;
-	background-color: transparent;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: 0;
+    background-color: transparent;
 }
 
 .swiper-wrapper {
-	margin-top: 40px
+    margin-top: 40px
 }
 
-@media screen and (max-width:320px) {
-	:root {
-		--textSize     : 12px;
-		--titleSize    : 20px;
-		--emphasizeSize: 18px;
-		--bottomSize   : 16px;
-	}
+@media screen and (max-width: 320px) {
+    :root {
+        --textSize: 15px;
+        --titleSize: 20px;
+        --emphasizeSize: 18px;
+        --bottomSize: 16px;
+    }
 
-	.swiper-wrapper {
-		margin-top: 10px
-	}
+    .swiper-wrapper {
+        margin-top: 10px
+    }
 }
 
-@media screen and (min-width:321px) and (max-width:375px) {
-	:root {
-		--textSize     : 12px;
-		--titleSize    : 20px;
-		--emphasizeSize: 18px;
-		--bottomSize   : 16px;
-	}
+@media screen and (min-width: 321px) and (max-width: 375px) {
+    :root {
+        --textSize: 15px;
+        --titleSize: 20px;
+        --emphasizeSize: 18px;
+        --bottomSize: 16px;
+    }
 
-	.swiper-wrapper {
-		margin-top: 10px
-	}
+    .swiper-wrapper {
+        margin-top: 10px
+    }
 }
 
-@media screen and (min-width:376px) and (max-width:414px) {
-	:root {
-		--textSize     : 13px;
-		--titleSize    : 21px;
-		--emphasizeSize: 19px;
-		--bottomSize   : 17px;
-	}
+@media screen and (min-width: 376px) and (max-width: 414px) {
+    :root {
+        --textSize: 15px;
+        --titleSize: 21px;
+        --emphasizeSize: 19px;
+        --bottomSize: 17px;
+    }
 
-	.swiper-wrapper {
-		margin-top: 10px
-	}
+    .swiper-wrapper {
+        margin-top: 10px
+    }
 }
 
-@media screen and (min-width:415px) and (max-width:639px) {
-	:root {
-		--textSize     : 14px;
-		--titleSize    : 22px;
-		--emphasizeSize: 20px;
-		--bottomSize   : 18px;
-	}
+@media screen and (min-width: 415px) and (max-width: 639px) {
+    :root {
+        --textSize: 15px;
+        --titleSize: 22px;
+        --emphasizeSize: 20px;
+        --bottomSize: 18px;
+    }
 }
 
-@media screen and (min-width:640px) and (max-width:719px) {
-	:root {
-		--textSize     : 15px;
-		--titleSize    : 23px;
-		--emphasizeSize: 21px;
-		--bottomSize   : 19px;
-	}
+@media screen and (min-width: 640px) and (max-width: 719px) {
+    :root {
+        --textSize: 15px;
+        --titleSize: 23px;
+        --emphasizeSize: 21px;
+        --bottomSize: 19px;
+    }
 }

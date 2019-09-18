@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kayisoft.mapper.WxHospitalUrlMapper">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.kayisoft.model.UrlBean">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="hospital_code" property="hospitalCode" jdbcType="VARCHAR"/>
+        <result column="hospital_name" property="hospitalName" jdbcType="VARCHAR"/>
+        <result column="hospital_url" property="hospitalUrl" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        hospital_code,
+        hospital_name,
+        hospital_url,
+        create_date,
+        update_date
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="urlBean.id">
+        INSERT INTO WX_HOSPITAL_URL (
+            id,
+            hospital_code,
+            hospital_name,
+            hospital_url,
+            create_date,
+            update_date
+        ) VALUES (
+            #{urlBean.id,jdbcType=INTEGER},
+            #{urlBean.hospitalCode,jdbcType=VARCHAR},
+            #{urlBean.hospitalName,jdbcType=VARCHAR},
+            #{urlBean.hospitalUrl,jdbcType=VARCHAR},
+            #{urlBean.createDate,jdbcType=VARCHAR},
+            #{urlBean.updateDate,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="urlBean.id">
+        INSERT INTO WX_HOSPITAL_URL
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="urlBean.id!=null"> id,</if>
+            <if test="urlBean.hospitalCode!=null"> hospital_code,</if>
+            <if test="urlBean.hospitalName!=null"> hospital_name,</if>
+            <if test="urlBean.hospitalUrl!=null"> hospital_url,</if>
+            <if test="urlBean.createDate!=null"> create_date,</if>
+            <if test="urlBean.updateDate!=null"> update_date,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="urlBean.id!=null">#{urlBean.id,jdbcType=INTEGER},
+            </if>
+            <if test="urlBean.hospitalCode!=null">#{urlBean.hospitalCode,jdbcType=VARCHAR},
+            </if>
+            <if test="urlBean.hospitalName!=null">#{urlBean.hospitalName,jdbcType=VARCHAR},
+            </if>
+            <if test="urlBean.hospitalUrl!=null">#{urlBean.hospitalUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="urlBean.createDate!=null">#{urlBean.createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="urlBean.updateDate!=null">#{urlBean.updateDate,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO WX_HOSPITAL_URL (
+            id,
+            hospital_code,
+            hospital_name,
+            hospital_url,
+            create_date,
+            update_date
+        )VALUES
+        <foreach collection="urlBeans" item="urlBean" index="index" separator=",">
+            (
+            #{urlBean.id,jdbcType=INTEGER},
+            #{urlBean.hospitalCode,jdbcType=VARCHAR},
+            #{urlBean.hospitalName,jdbcType=VARCHAR},
+            #{urlBean.hospitalUrl,jdbcType=VARCHAR},
+            #{urlBean.createDate,jdbcType=VARCHAR},
+            #{urlBean.updateDate,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="updateByPrimaryKeySelective">
+        UPDATE WX_HOSPITAL_URL
+        <set>
+            <if test="urlBean.hospitalCode != null"> hospital_code= #{urlBean.hospitalCode,jdbcType=VARCHAR},</if>
+            <if test="urlBean.hospitalName != null"> hospital_name= #{urlBean.hospitalName,jdbcType=VARCHAR},</if>
+            <if test="urlBean.hospitalUrl != null"> hospital_url= #{urlBean.hospitalUrl,jdbcType=VARCHAR},</if>
+            <if test="urlBean.createDate != null"> create_date= #{urlBean.createDate,jdbcType=VARCHAR},</if>
+            <if test="urlBean.updateDate != null"> update_date= #{urlBean.updateDate,jdbcType=VARCHAR}</if>
+        </set>
+        WHERE id = #{urlBean.id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByHospitalCode" resultMap="BaseResultMap">
+      SELECT
+      <include refid="Base_Column_List"/>
+      FROM WX_HOSPITAL_URL
+      WHERE HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
+    </select>
+</mapper>
+

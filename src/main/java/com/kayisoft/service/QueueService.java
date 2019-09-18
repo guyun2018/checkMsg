@@ -55,10 +55,10 @@ public interface QueueService {
 
     /**
      * 一键签到
-     * @param openId openId
+     * @param queueBean queueBean
      * @return result
      */
-    Result checkSignIn(String openId);
+    Result checkSignIn(QueueBean queueBean);
 
     Result sendTemplateByOpenId(String openId);
 }
