@@ -16,7 +16,7 @@ public interface QueueService {
      * @param queueBean bean
      * @return result
      */
-    QueueBean getQueueInfo(QueueBean queueBean);
+    QueueBean getQueueInfo(QueueBean queueBean) throws Exception;
 
 
     /**
@@ -38,7 +38,7 @@ public interface QueueService {
      * @param uuid uuid
      * @param openId openId
      */
-    void addOpenId(String uuid,String openId);
+    void addOpenId(String uuid,String openId) throws Exception;
 
     /**
      * 删除openId(取消关注)
@@ -60,5 +60,5 @@ public interface QueueService {
      */
     Result checkSignIn(QueueBean queueBean);
 
-    Result sendTemplateByOpenId(String openId);
+    Result sendTemplateByOpenId(String openId) throws Exception;
 }

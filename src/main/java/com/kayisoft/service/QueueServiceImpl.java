@@ -62,15 +62,18 @@ public class QueueServiceImpl implements QueueService {
      * @return result
      */
     @Override
-    public QueueBean getQueueInfo(QueueBean queueBean) {
+    public QueueBean getQueueInfo(QueueBean queueBean) throws Exception {
 //        Map<String, Object> map = PropertiesUtil.getProfileByClassLoader("hospitalUrl.properties");
 //        String serverUrl = map.get(queueBean.getHospitalCode()).toString();
         UrlBean urlBean = wxHospitalUrlMapper.selectByHospitalCode(queueBean.getHospitalCode());
+        if (urlBean == null) {
+            throw new Exception("找不到服务器路径");
+        }
         String url = "http://" + urlBean.getHospitalUrl() + ":10003/api/addList";
         Map map = new HashMap();
         map.put("accessionNo", queueBean.getAccessionNo());
         map.put("hospitalCode", queueBean.getHospitalCode());
-        map.put("type", "0");
+        map.put("type", queueBean.getType());
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Map> requestEntity = new HttpEntity<>(map, header);
@@ -79,7 +82,9 @@ public class QueueServiceImpl implements QueueService {
         JSONObject jsonObject = JSONObject.parseObject(body);
         if (jsonObject.getBoolean("success")) {
             QueueBean bean = JSON.toJavaObject(jsonObject.getJSONObject("obj"), QueueBean.class);
-            bean.setScheduledDate(DateUtil.timeStamp2Date(bean.getScheduledDate(), "yyyy-MM-dd HH:mm"));
+            if (bean != null) {
+                bean.setScheduledDate(DateUtil.timeStamp2Date(bean.getScheduledDate(), "yyyy-MM-dd HH:mm"));
+            }
 //        QueueBean queueBean1 = new QueueBean();
 //        queueBean1.setHospitalCode("47068179533038211A1001");
 //        queueBean1.setAccessionNo("abcde110");
@@ -94,11 +99,11 @@ public class QueueServiceImpl implements QueueService {
 //        queueBean1.setCheckStatus("签到");
 //        queueBean1.setPatientId("125200");
             //模拟type为1时消息模板自动回复
-            if (queueBean.getType() == 1) {
-                Result result = sendTemplateMsg(bean);
-            }
+//            if (queueBean.getType() == 1) {
+//                Result result = sendTemplateMsg(bean);
+//            }
             return bean;
-        }else {
+        } else {
             queueBean.setMsg(jsonObject.getString("msg"));
             return queueBean;
         }
@@ -184,7 +189,7 @@ public class QueueServiceImpl implements QueueService {
      * @param openId openId
      */
     @Override
-    public void addOpenId(String uuid, String openId) {
+    public void addOpenId(String uuid, String openId) throws Exception {
         QueueUserInfo queueUserInfo = new QueueUserInfo();
         queueUserInfo.setId(uuid);
         queueUserInfo.setOpenId(openId);
@@ -276,7 +281,7 @@ public class QueueServiceImpl implements QueueService {
     }
 
     @Override
-    public Result sendTemplateByOpenId(String openId) {
+    public Result sendTemplateByOpenId(String openId) throws Exception {
         List<QueueUserInfo> list = queueUserInfoMapper.selectInfoByOpenId(openId);
         if (list.size() == 0) {
             return new Result(false, "查询失败");
@@ -286,7 +291,7 @@ public class QueueServiceImpl implements QueueService {
         return new Result(true, "发送成功");
     }
 
-    public void castToSendTemplate(List<QueueUserInfo> list) {
+    public void castToSendTemplate(List<QueueUserInfo> list) throws Exception {
         for (int i = 0; i < list.size(); i++) {
             QueueUserInfo queueUserInfo1 = list.get(i);
             QueueBean queueBean = new QueueBean();

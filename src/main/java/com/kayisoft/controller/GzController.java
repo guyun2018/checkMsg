@@ -63,7 +63,7 @@ public class GzController {
      * @param response 响应体
      */
     @RequestMapping(value = "/wechat", method = RequestMethod.POST, produces = {"application/xml;charset=utf-8"})
-    public void doRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //将XML转为Map
         Map<String, String> map = XMLUtil.getMap(request.getInputStream());
         response.setCharacterEncoding("UTF-8");

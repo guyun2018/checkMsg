@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class QueueController {
      * @return str
      */
     @RequestMapping(value = "/checkQueue",method = RequestMethod.GET)
-    public String checkQueue(HttpServletRequest request){
+    public String checkQueue(HttpServletRequest request, HttpServletResponse response){
         String patientId = request.getParameter("patientId");
         String accessNo = request.getParameter("accessNo");
         String hospitalCode = request.getParameter("hospitalCode");
@@ -36,8 +37,13 @@ public class QueueController {
         queueBean.setAccessionNo(accessNo);
         queueBean.setHospitalCode(hospitalCode);
         queueBean.setType(0);
-        QueueBean queueBean1 = queueService.getQueueInfo(queueBean);
-        queueBean1.setPatientId(patientId);
+        QueueBean queueBean1 = null;
+        try {
+            queueBean1 = queueService.getQueueInfo(queueBean);
+            queueBean1.setPatientId(patientId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         request.setAttribute("info",queueBean1);
         return "queue";
     }
@@ -83,6 +89,6 @@ public class QueueController {
     @ResponseBody
     public Result checkSignIn(@RequestBody QueueBean queueBean){
         Result result = queueService.checkSignIn(queueBean);
-        return null;
+        return result;
     }
 }
