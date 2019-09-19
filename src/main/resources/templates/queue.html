@@ -115,7 +115,8 @@
     })
     //刷新
     $(".refreshBtn").click(function (e) {
-        window.location.reload();
+        window.location.href = location.href+'?time='+((new Date()).getTime());
+        // window.location.reload();
         // window.location.href="/checkQueue?accessNo="+access+"&hospitalCode="+hospitalCode;
     })
     $(".signIn").click(function (e) {
