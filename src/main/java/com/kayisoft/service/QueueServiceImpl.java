@@ -22,10 +22,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author tianqiu.lan
@@ -79,6 +76,7 @@ public class QueueServiceImpl implements QueueService {
         HttpEntity<Map> requestEntity = new HttpEntity<>(map, header);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestEntity, String.class);
         String body = responseEntity.getBody();
+        System.out.println(body);
         JSONObject jsonObject = JSONObject.parseObject(body);
         if (jsonObject.getBoolean("success")) {
             QueueBean bean = JSON.toJavaObject(jsonObject.getJSONObject("obj"), QueueBean.class);
@@ -125,6 +123,16 @@ public class QueueServiceImpl implements QueueService {
         } else {
             return new Result(false, "未关注", null);
         }
+    }
+
+    public List<String> getOpenIdForSendMsg(QueueUserInfo queueUserInfo) {
+        //获取到多个openId（同个检查多个关注者）
+        List<QueueUserInfo> list = queueUserInfoMapper.selectOpenIdForSendMsg(queueUserInfo);
+        List<String> stringList = new ArrayList<>();
+        for (QueueUserInfo info : list) {
+            stringList.add(info.getOpenId());
+        }
+        return stringList;
     }
 
     /**
@@ -195,8 +203,10 @@ public class QueueServiceImpl implements QueueService {
         queueUserInfo.setOpenId(openId);
         //插入openId
         queueUserInfoMapper.updateByPrimaryKeySelective(queueUserInfo);
-        //根据uuid前置机发送模板消息
-        List<QueueUserInfo> list = queueUserInfoMapper.selectAccNoById(uuid);
+        //根据uuid查询openId，前置机发送模板消息
+        QueueUserInfo info = queueUserInfoMapper.selectAccNoById(uuid);
+        List<QueueUserInfo> list = new ArrayList<>();
+        list.add(info);
         castToSendTemplate(list);
     }
 
@@ -223,12 +233,13 @@ public class QueueServiceImpl implements QueueService {
         //通过patiendId查询openId
         queueUserInfo.setPatientId(queueBean.getPatientId());
         queueUserInfo.setHospitalCode(queueBean.getHospitalCode());
-        Result openIdInfo = getOpenId(queueUserInfo);
-        if (!openIdInfo.isSuccess()) {
+        queueUserInfo.setAccessNo(queueBean.getAccessionNo());
+        //获取到多个openId（同个检查多个关注者）
+        List<String> openIdForSendMsg = getOpenIdForSendMsg(queueUserInfo);
+        if (openIdForSendMsg.size() == 0) {
             return new Result(false, "找不到openId", null);
         }
         WechatTemplate wechatTemplate = new WechatTemplate();
-        wechatTemplate.setTouser(openIdInfo.getObj().toString());
         wechatTemplate.setTopcolor("#FF0000");
         Map<String, TemplateData> mapdata = new HashMap<>();
         mapdata.put("name", new TemplateData(queueBean.getPatientName(), "#173177"));
@@ -239,21 +250,24 @@ public class QueueServiceImpl implements QueueService {
         mapdata.put("checkDate", new TemplateData(queueBean.getScheduledDate(), "#173177"));
         mapdata.put("checkDep", new TemplateData(queueBean.getCallRoom(), "#173177"));
         wechatTemplate.setData(mapdata);
-        if ("已签到".equals(queueBean.getCheckStatus())) {
+        if ("签到".equals(queueBean.getCheckStatus())) {
             wechatTemplate.setTemplate_id(startTemplateId);
         } else {
             wechatTemplate.setTemplate_id(notStartTemplateId);
         }
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(GzUrl.getSendMsgUrl.getUrl() +
-                accessTokenService.getAccToken("AccessTokenCache"), JSON.toJSONString(wechatTemplate), String.class);
-        String msg = responseEntity.getBody();
-        JSONObject jsonObject = JSONObject.parseObject(responseEntity.getBody());
+        String msg = "模板发送成功";
         String errcode = "errcode";
-        if (jsonObject.getInteger(errcode) == 0) {
-            return new Result(true, "模板发送成功", null);
-        } else {
-            return new Result(false, "消息发送失败", msg);
+        boolean flag = true;
+        for (String openId : openIdForSendMsg) {
+            wechatTemplate.setTouser(openId);
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(GzUrl.getSendMsgUrl.getUrl() +
+                    accessTokenService.getAccToken("AccessTokenCache"), JSON.toJSONString(wechatTemplate), String.class);
+            JSONObject jsonObject = JSONObject.parseObject(responseEntity.getBody());
+            if (jsonObject.getInteger(errcode) != 0) {
+                msg = responseEntity.getBody();
+            }
         }
+        return new Result(flag, msg, null);
     }
 
     /**

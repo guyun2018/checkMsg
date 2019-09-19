@@ -116,6 +116,7 @@ access_no
       SELECT <include refid="Base_Column_List"/>
       FROM QUEUE_USER_INFO
       WHERE  PATIENT_ID = #{patientId,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
+        AND ACCESS_NO = #{accessNo,jdbcType=VARCHAR}
     </select>
 
     <delete id="deleteByOpenId">
@@ -134,6 +135,14 @@ access_no
       PATIENT_ID,HOSPITAL_CODE,ACCESS_NO
     FROM QUEUE_USER_INFO
     WHERE ID = #{uuid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectOpenIdForSendMsg" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM QUEUE_USER_INFO
+    WHERE ACCESS_NO = #{accessNo,jdbcType=VARCHAR} AND HOSPITAL_CODE = #{hospitalCode,jdbcType=VARCHAR}
+    AND PATIENT_ID = #{patientId,jdbcType=VARCHAR}
     </select>
 </mapper>
 

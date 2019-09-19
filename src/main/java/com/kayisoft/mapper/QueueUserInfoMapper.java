@@ -24,5 +24,7 @@ public interface QueueUserInfoMapper {
 
     void deleteByOpenId(String openId);
 
-    List<QueueUserInfo> selectAccNoById(String uuid);
+    QueueUserInfo selectAccNoById(String uuid);
+
+    List<QueueUserInfo> selectOpenIdForSendMsg(QueueUserInfo queueUserInfo);
 }

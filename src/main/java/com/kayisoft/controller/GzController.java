@@ -118,6 +118,10 @@ public class GzController {
 
                     }
                     break;
+                case "SCAN":
+                    //已关注情况下扫其他病人检查单
+                    queueService.addOpenId(uuid, toUser);
+                    break;
                 default:
                     break;
             }

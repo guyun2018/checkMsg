@@ -21,8 +21,8 @@
         <div class="swiper-slide swiper-slide-active">
             <div class="queueInfo" th:if="${info.checkStatus =='签到'}">
                 <div class="title" th:text="${info.patientName}"></div>
-                <div>当前号码：<span class="emphasize" th:text="${info.queueNo}"></span></div>
-                <div>我的号码：<span class="emphasize" th:text="${info.callId}"></span></div>
+                <div>当前排号：<span class="emphasize" th:text="${info.queueNo}"></span></div>
+                <div>我的排号：<span class="emphasize" th:text="${info.callId}"></span></div>
                 <div>检查项目：<span class="emphasize" th:text="${info.scheduledModality}"></span></div>
                 <div>检查时间：<span class="emphasize" th:text="${info.scheduledDate}"></span>
                     <span class="emphasize" th:text="${info.medcine}"></span></div>
@@ -34,12 +34,13 @@
             </div>
             <div class="queueInfo" th:if="${info.checkStatus !='签到'}">
                 <div class="title" th:text="${info.patientName}"></div>
-                <!--<div>当前号码：<span class="emphasize" th:text="${info.queueNo}"></span></div>-->
-                <div>我的号码：<span class="emphasize" th:text="${info.callId}"></span></div>
+                <div>当前排号：<span class="emphasize" th:text="${info.queueNo}"></span></div>
+                <div>我的排号：<span class="emphasize" th:text="${info.callId}"></span></div>
                 <div>检查项目：<span class="emphasize" th:text="${info.scheduledModality}"></span></div>
                 <div>检查时间：<span class="emphasize" th:text="${info.scheduledDate}"></span>
                     <span class="emphasize" th:text="${info.medcine}"></span></div>
-                <div>您还未签到，请点击下方签到按钮</div>
+                <div>您还未签到，请到<span class="emphasize"
+                                   th:text="${info.callRoom}"></span>签到或点击下方签到按钮</div>
 
             </div>
             <!--<div class="queueInfo" th:if="${info.isStart ==0}">-->
@@ -89,13 +90,14 @@
         }
         document.getElementById('loadQR').addEventListener("click", () => {
             // document.getElementById('loadQR').style.opacity = '0';
-            gz().then(e => {
-                if (e.success) {
-                    window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU5MzY2NTIxMQ==#wechat_redirect"
-                } else {
-                    return createQrCode();
-                }
-            }).then(res => {
+            // gz().then(e => {
+            //     if (e.success) {
+            //         window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU5MzY2NTIxMQ==#wechat_redirect"
+            //     } else {
+            //         return createQrCode();
+            //     }
+            // })
+            createQrCode().then(res => {
                 let qrPath = res;
                 document.getElementById("loadQR").style.display = 'none';
                 document.getElementById("qrImg").src = qrPath;
@@ -126,7 +128,8 @@
                 if (e.success){
                     layer.msg("签到成功！")
                     setTimeout(function (e) {
-                        window.location.reload();
+                        // window.location.reload();
+                        window.location.href = location.href+'?time='+((new Date()).getTime());
                     },1500)
                 }else {
                     layer.alert("签到失败！请到护士台刷卡签到")
